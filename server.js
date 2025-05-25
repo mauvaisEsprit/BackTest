@@ -87,7 +87,7 @@ app.post("/api/bookings/form1", async (req, res) => {
     } = req.body;
 
     if (!from || !date || !name || !phone || !email || !garant) {
-      return res.status(400).json({ message: "Отсутствуют обязательные поля" });
+      return res.status(400).json({ message: "Отсутствуют обязательные поля." });
     }
 
     const booking = new Booking1({
