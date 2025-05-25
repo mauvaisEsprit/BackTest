@@ -148,7 +148,6 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Куда:</b> ${to}</p>
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Обратная дата:</b> ${isRoundTrip ? parisReturnDate : "не указана"}</p>
-        }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
         <p><b>Дети:</b> ${children || 0}</p>
         <p><b>Багаж:</b> ${baggage ? "Да" : "Нет"}</p>
@@ -217,8 +216,8 @@ app.post("/api/bookings/form2", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
+    
     const normPrice = booking.totalPrice;
-
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
 
@@ -265,6 +264,15 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
     booking.confirmed = true;
     await booking.save();
 
+    const parisDate = moment(booking.date)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
+
+    const parisReturnDate = moment(booking.returnDate)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
+    await booking.save();
+
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
@@ -273,9 +281,16 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование обычной поездки подтверждено.</p>
         <p><b>Номер бронирования:</b> ${booking._id}</p>
+        <p><b>Имя:</b> ${booking.name}</p>
+        <p><b>Телефон:</b> ${booking.phone}</p>
+        <p><b>Email:</b> ${booking.email}</p>
         <p><b>Дата:</b> ${parisDate}</p>
-        <p><b>Место подачи:</b> ${booking.from}</p>
-        <p><b>Длительность:</b> ${booking.duration || "не указано"} ч.</p>
+        <p><b>Дата возвращения:</b> ${parisReturnDate || "не указана"}</p>
+        <p><b>Откуда:</b> ${booking.from}</p>
+        <p><b>Куда:</b> ${booking.to}</p>
+        <p><b>Взрослые:</b> ${booking.adults || 1}</p>
+        <p><b>Дети:</b> ${booking.children || 0}</p>
+        <p><b>Багаж:</b> ${booking.baggage ? "Да" : "Нет"}</p>
         <p>Ждём вас!</p>
       `,
     };
@@ -288,6 +303,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
     res.status(500).send("Ошибка сервера");
   }
 });
+
 
 // --- Подтверждение бронирования формы 2 ---
 app.get("/api/bookings/confirm2/:id", async (req, res) => {
@@ -300,6 +316,12 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     booking.confirmed = true;
     await booking.save();
 
+    const parisDate = moment(booking.date)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
+
+      const normPrice = booking.totalPrice;
+
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
@@ -308,9 +330,13 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование почасовой аренды подтверждено.</p>
         <p><b>Номер бронирования:</b> ${booking._id}</p>
+        <p><b>Имя:</b> ${booking.name}</p>
+        <p><b>Телефон:</b> ${booking.phone}</p>
+        <p><b>Email:</b> ${booking.email}</p>
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Место подачи:</b> ${booking.pickupLocation}</p>
         <p><b>Длительность:</b> ${booking.duration} ч.</p>
+        <p><b>Цена:</b> ${normPrice}</p>
         <p>Ждём вас!</p>
       `,
     };
@@ -323,6 +349,7 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     res.status(500).send("Ошибка сервера");
   }
 });
+
 
 // Запуск сервера
 const PORT = process.env.PORT || 3001;
