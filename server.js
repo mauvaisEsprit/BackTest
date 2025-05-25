@@ -209,7 +209,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
-    const normPrice = booking.totalPrice.toFixed(2);
+    const normPrice = booking.totalPrice;
 
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
