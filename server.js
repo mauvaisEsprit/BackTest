@@ -63,9 +63,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const parisDate = moment(booking.date)
-  .tz("Europe/Paris")
-  .format("DD/MM/YYYY HH:mm");
+
 
 // --- Первый роут — обычная поездка ---
 app.post("/api/bookings/form1", async (req, res) => {
@@ -137,13 +135,7 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Обратная дата:</b> ${
           returnDate
-            ? new Date(returnDate).toLocaleString("fr-FR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })
+            ? new Date(returnDate).toLocaleString(parisDate)
             : "не указано"
         }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
