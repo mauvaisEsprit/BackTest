@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 require("dotenv").config();
+const moment = require("moment-timezone");
+
 
 const app = express();
 app.use(cors());
@@ -61,6 +63,9 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMAIL_APP_PASSWORD,
   },
 });
+
+ const parisDate = moment(booking.date).tz("Europe/Paris").format("DD/MM/YYYY HH:mm");
+
 
 // --- Первый роут — обычная поездка ---
 app.post("/api/bookings/form1", async (req, res) => {
@@ -125,13 +130,7 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Email:</b> ${email}</p>
         <p><b>Откуда:</b> ${from}</p>
         <p><b>Куда:</b> ${to}</p>
-        <p><b>Дата:</b> ${new Date(date).toLocaleString("fr-FR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        })}</p>
+        <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Обратная дата:</b> ${
           returnDate
             ? new Date(returnDate).toLocaleString("fr-FR", {
@@ -218,13 +217,7 @@ app.post("/api/bookings/form2", async (req, res) => {
         <p><b>Email:</b> ${email}</p>
         <p><b>Место подачи:</b> ${pickupLocation}</p>
         <p><b>Длительность:</b> ${duration} ч.</p>
-        <p><b>Дата:</b> ${new Date(date).toLocaleString("fr-FR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        })}</p>
+        <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Цель поездки:</b> ${tripPurpose || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
@@ -260,13 +253,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование обычной поездки подтверждено.</p>
-        <p><b>Дата:</b> ${new Date(booking.date).toLocaleString("fr-FR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}</p>
+        <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Место подачи:</b> ${booking.from}</p>
         <p><b>Длительность:</b> ${booking.duration || "не указано"} ч.</p>
         <p>Ждём вас!</p>
@@ -296,17 +283,11 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
-      subject: "Ваше бронирование подтверждено (Почасовая аренда)",
+      subject: "Ваше бронирование подтверждено.",
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование почасовой аренды подтверждено.</p>
-        <p><b>Дата:</b> ${new Date(booking.date).toLocaleString("fr-FR", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}</p>
+        <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Место подачи:</b> ${booking.pickupLocation}</p>
         <p><b>Длительность:</b> ${booking.duration} ч.</p>
         <p>Ждём вас!</p>
