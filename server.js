@@ -151,7 +151,7 @@ app.post("/api/bookings/form1", async (req, res) => {
 
     const parisReturnDate = booking.returnDate
   ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
-  : t("email.not_specified");
+  : i18next.t("email.not_specified");
 
     await booking.save();
 
