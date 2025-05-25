@@ -260,7 +260,13 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование обычной поездки подтверждено.</p>
-        <p><b>Дата:</b> ${new Date(booking.date).toLocaleString()}</p>
+        <p><b>Дата:</b> ${new Date(booking.date).toLocaleString("fr-FR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}</p>
         <p><b>Место подачи:</b> ${booking.from}</p>
         <p><b>Длительность:</b> ${booking.duration || "не указано"} ч.</p>
         <p>Ждём вас!</p>
@@ -294,7 +300,13 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование почасовой аренды подтверждено.</p>
-        <p><b>Дата:</b> ${new Date(booking.date).toLocaleString()}</p>
+        <p><b>Дата:</b> ${new Date(booking.date).toLocaleString("fr-FR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}</p>
         <p><b>Место подачи:</b> ${booking.pickupLocation}</p>
         <p><b>Длительность:</b> ${booking.duration} ч.</p>
         <p>Ждём вас!</p>
