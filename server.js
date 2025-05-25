@@ -148,9 +148,9 @@ app.post("/api/bookings/form1", async (req, res) => {
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
-    const parisReturnDate = moment(booking.returnDate)
-      .tz("Europe/Paris")
-      .format("DD/MM/YYYY HH:mm");
+    const parisReturnDate = booking.returnDate
+  ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
+  : null;
     await booking.save();
 
     const normPrice =
@@ -383,6 +383,41 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     res.status(500).send("Ошибка сервера");
   }
 });
+
+
+
+app.post("/api/contact", async (req, res) => {
+  try {
+    const { name, email, message } = req.body;
+
+    // Простая проверка на наличие обязательных полей
+    if (!name || !email || !message) {
+      return res.status(400).json({ message: "Все поля обязательны." });
+    }
+
+    // Настройка письма
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: process.env.GMAIL_USER, // вы получите сообщение на этот адрес
+      subject: "Новое сообщение с контактной формы",
+      html: `
+        <h2>Новое сообщение с контактной формы</h2>
+        <p><b>Имя:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Сообщение:</b></p>
+        <p>${message.replace(/\n/g, "<br>")}</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptionsAdmin);
+
+    res.status(200).json({ message: "Сообщение успешно отправлено." });
+  } catch (error) {
+    console.error("Ошибка при отправке контактного письма:", error);
+    res.status(500).json({ message: "Ошибка при отправке письма." });
+  }
+});
+
 
 
 // Запуск сервера
