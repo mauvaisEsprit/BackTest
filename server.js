@@ -201,7 +201,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       phone,
       email,
       tripPurpose,
-      price,
+      totalPrice,
       garant,
     });
     const parisDate = moment(booking.date)
@@ -210,7 +210,7 @@ app.post("/api/bookings/form2", async (req, res) => {
     await booking.save();
 
     const normPrice =
-  typeof booking.price === "number" ? booking.price.toFixed(2) : "не указано";
+  typeof booking.totalPrice === "number" ? booking.totalPrice.toFixed(2) : "не указано";
 
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
