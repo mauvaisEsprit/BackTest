@@ -117,6 +117,10 @@ app.post("/api/bookings/form1", async (req, res) => {
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
+    const parisReturnDate = moment(booking.returnDate)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
+    await booking.save();
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
 
@@ -133,16 +137,14 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Откуда:</b> ${from}</p>
         <p><b>Куда:</b> ${to}</p>
         <p><b>Дата:</b> ${parisDate}</p>
-        <p><b>Обратная дата:</b> ${
-          returnDate
-            ? new Date(returnDate).toLocaleString(parisDate)
-            : "не указано"
+        <p><b>Обратная дата:</b> ${parisReturnDate || "не указана"}</p>
         }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
         <p><b>Дети:</b> ${children || 0}</p>
         <p><b>Багаж:</b> ${baggage || "не указано"}</p>
         <p><b>Комментарии:</b> ${comment || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
+        <p><b>Цена:</b> ${price || "не указана"}</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
       `,
     };
