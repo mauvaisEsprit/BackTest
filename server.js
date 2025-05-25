@@ -4,14 +4,14 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 require("dotenv").config();
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error("MongoDB connection error:", err));
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Схема для первой формы (Обычная поездка)
 const bookingSchema1 = new mongoose.Schema({
@@ -125,8 +125,24 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Email:</b> ${email}</p>
         <p><b>Откуда:</b> ${from}</p>
         <p><b>Куда:</b> ${to}</p>
-        <p><b>Дата:</b> ${new Date(date).toLocaleString()}</p>
-        <p><b>Обратная дата:</b> ${returnDate ? new Date(returnDate).toLocaleString() : "не указано"}</p>
+        <p><b>Дата:</b> ${new Date(date).toLocaleString("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}</p>
+        <p><b>Обратная дата:</b> ${
+          returnDate
+            ? new Date(returnDate).toLocaleString("fr-FR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "не указано"
+        }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
         <p><b>Дети:</b> ${children || 0}</p>
         <p><b>Багаж:</b> ${baggage || "не указано"}</p>
@@ -138,7 +154,9 @@ app.post("/api/bookings/form1", async (req, res) => {
 
     await transporter.sendMail(mailOptionsAdmin);
 
-    res.status(200).json({ message: "Заявка формы 1 отправлена, ожидайте подтверждения." });
+    res
+      .status(200)
+      .json({ message: "Заявка формы 1 отправлена, ожидайте подтверждения." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Ошибка сервера" });
@@ -161,7 +179,15 @@ app.post("/api/bookings/form2", async (req, res) => {
       garant,
     } = req.body;
 
-    if (!pickupLocation || !duration || !date || !name || !phone || !email || !garant) {
+    if (
+      !pickupLocation ||
+      !duration ||
+      !date ||
+      !name ||
+      !phone ||
+      !email ||
+      !garant
+    ) {
       return res.status(400).json({ message: "Отсутствуют обязательные поля" });
     }
 
@@ -192,7 +218,13 @@ app.post("/api/bookings/form2", async (req, res) => {
         <p><b>Email:</b> ${email}</p>
         <p><b>Место подачи:</b> ${pickupLocation}</p>
         <p><b>Длительность:</b> ${duration} ч.</p>
-        <p><b>Дата:</b> ${new Date(date).toLocaleString()}</p>
+        <p><b>Дата:</b> ${new Date(date).toLocaleString("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}</p>
         <p><b>Цель поездки:</b> ${tripPurpose || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
@@ -201,7 +233,9 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     await transporter.sendMail(mailOptionsAdmin);
 
-    res.status(200).json({ message: "Заявка формы 2 отправлена, ожидайте подтверждения." });
+    res
+      .status(200)
+      .json({ message: "Заявка формы 2 отправлена, ожидайте подтверждения." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Ошибка сервера" });
