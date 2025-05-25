@@ -122,7 +122,9 @@ app.post("/api/bookings/form1", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
-    const normPrice = booking.price.toFixed(2);
+    const normPrice =
+  typeof booking.price === "number" ? booking.price.toFixed(2) : "не указано";
+
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
 
@@ -207,7 +209,9 @@ app.post("/api/bookings/form2", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
-    const normPrice = booking.price.toFixed(2);
+    const normPrice =
+  typeof booking.price === "number" ? booking.price.toFixed(2) : "не указано";
+
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
 
