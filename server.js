@@ -145,7 +145,7 @@ app.post("/api/bookings/form1", async (req, res) => {
         }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
         <p><b>Дети:</b> ${children || 0}</p>
-        <p><b>Багаж:</b> ${baggage || "не указано"}</p>
+        <p><b>Багаж:</b> ${baggage ? "Да" : "Нет"}</p>
         <p><b>Комментарии:</b> ${comment || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
         <p><b>Цена:</b> ${normPrice || "не указана"}</p>
