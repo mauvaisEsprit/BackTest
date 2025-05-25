@@ -123,7 +123,7 @@ app.post("/api/bookings/form1", async (req, res) => {
     await booking.save();
 
     const normPrice =
-  typeof booking.price === "number" ? booking.price.toFixed(2) : "не указано";
+      typeof booking.price === "number" ? booking.price.toFixed(2) : "не указано";
 
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
@@ -141,14 +141,14 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Откуда:</b> ${from}</p>
         <p><b>Куда:</b> ${to}</p>
         <p><b>Дата:</b> ${parisDate}</p>
-        <p><b>Обратная дата:</b> ${parisReturnDate || "не указана"}</p>
+        <p><b>Обратная дата:</b> ${isRoundTrip ? parisReturnDate : "не указана"}</p>
         }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
         <p><b>Дети:</b> ${children || 0}</p>
         <p><b>Багаж:</b> ${baggage ? "Да" : "Нет"}</p>
         <p><b>Комментарии:</b> ${comment || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
-        <p><b>Цена:</b> ${normPrice || "не указана"}</p>
+        <p><b>Цена:</b> ${normPrice}</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
       `,
     };
@@ -209,8 +209,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
-    const normPrice =
-  typeof booking.totalPrice === "number" ? booking.totalPrice.toFixed(2) : "не указано";
+    const normPrice = booking.totalPrice.toFixed(2);
 
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
