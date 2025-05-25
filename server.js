@@ -174,6 +174,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       name,
       phone,
       email,
+      price,
       tripPurpose,
       garant,
     } = req.body;
