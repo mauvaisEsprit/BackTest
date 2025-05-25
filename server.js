@@ -73,6 +73,7 @@ app.post("/api/bookings/form1", async (req, res) => {
     const {
       from,
       to,
+      id,
       date,
       returnDate,
       adults,
@@ -98,6 +99,7 @@ app.post("/api/bookings/form1", async (req, res) => {
     const booking = new Booking1({
       from,
       to,
+      id,
       date,
       returnDate,
       adults,
@@ -135,6 +137,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       subject: "Новая заявка на бронирование (Обычная поездка)",
       html: `
         <h2>Новая заявка на бронирование (Обычная поездка)</h2>
+        <p><b>Номер бронирования:</b> ${booking._id}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -171,6 +174,7 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     const {
       pickupLocation,
+      id,
       duration,
       date,
       name,
@@ -195,6 +199,7 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     const booking = new Booking2({
       pickupLocation,
+      id,
       duration,
       date,
       name,
@@ -221,6 +226,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       subject: "Новая заявка на бронирование (Почасовая аренда)",
       html: `
         <h2>Новая заявка на бронирование (Почасовая аренда)</h2>
+        <p><b>Номер бронирования:</b> ${booking._id}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -263,6 +269,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование обычной поездки подтверждено.</p>
+        <p><b>Номер бронирования:</b> ${booking._id}</p>
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Место подачи:</b> ${booking.from}</p>
         <p><b>Длительность:</b> ${booking.duration || "не указано"} ч.</p>
@@ -297,6 +304,7 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование почасовой аренды подтверждено.</p>
+        <p><b>Номер бронирования:</b> ${booking._id}</p>
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Место подачи:</b> ${booking.pickupLocation}</p>
         <p><b>Длительность:</b> ${booking.duration} ч.</p>
