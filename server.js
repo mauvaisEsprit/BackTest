@@ -5,7 +5,6 @@ const cors = require("cors");
 require("dotenv").config();
 const moment = require("moment-timezone");
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -64,8 +63,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
- const parisDate = moment(booking.date).tz("Europe/Paris").format("DD/MM/YYYY HH:mm");
-
+const parisDate = moment(booking.date)
+  .tz("Europe/Paris")
+  .format("DD/MM/YYYY HH:mm");
 
 // --- Первый роут — обычная поездка ---
 app.post("/api/bookings/form1", async (req, res) => {
@@ -92,7 +92,9 @@ app.post("/api/bookings/form1", async (req, res) => {
     } = req.body;
 
     if (!from || !date || !name || !phone || !email || !garant) {
-      return res.status(400).json({ message: "Отсутствуют обязательные поля." });
+      return res
+        .status(400)
+        .json({ message: "Отсутствуют обязательные поля." });
     }
 
     const booking = new Booking1({
@@ -113,7 +115,9 @@ app.post("/api/bookings/form1", async (req, res) => {
       duration,
       tripPurpose,
     });
-
+    const parisDate = moment(booking.date)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
@@ -200,7 +204,9 @@ app.post("/api/bookings/form2", async (req, res) => {
       tripPurpose,
       garant,
     });
-
+    const parisDate = moment(booking.date)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
