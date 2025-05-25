@@ -409,7 +409,7 @@ app.post("/api/contact", async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(mailOptionsAdmin);
+    await transporter.sendMail(mailOptions);
 
     res.status(200).json({ message: "Сообщение успешно отправлено." });
   } catch (error) {
