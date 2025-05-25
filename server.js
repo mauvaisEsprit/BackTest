@@ -148,9 +148,11 @@ app.post("/api/bookings/form1", async (req, res) => {
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
+
     const parisReturnDate = booking.returnDate
   ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
-  : null;
+  : t("email.not_specified");
+
     await booking.save();
 
     const normPrice =
@@ -316,7 +318,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
         <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
         <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
         <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
-        <p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate ? parisReturnDate : i18next.t("email.not_specified")  }</p>
+        <p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate || i18next.t("email.not_specified")}</p>
         <p><b>${i18next.t("email.from")}:</b> ${booking.from}</p>
         <p><b>${i18next.t("email.to")}:</b> ${booking.to}</p>
         <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
