@@ -229,7 +229,7 @@ app.post("/api/bookings/form2", async (req, res) => {
         <p><b>Длительность:</b> ${duration} ч.</p>
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Цель поездки:</b> ${tripPurpose || "не указано"}</p>
-        <p><b>Цена:</b> ${normPrice || "не указана"}</p>
+        <p><b>Цена:</b> ${normPrice}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
       `,
