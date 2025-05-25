@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 require("dotenv").config();
-const dayjs = require("dayjs");
+
 
 const app = express();
 app.use(cors());
@@ -111,7 +111,7 @@ app.post("/api/bookings/form1", async (req, res) => {
 
     await booking.save();
 
-    const confirmUrl = `http://localhost:3001/api/bookings/confirm1/${booking._id}`;
+    const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
 
     // Письмо админу
     const mailOptionsAdmin = {
@@ -178,7 +178,7 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     await booking.save();
 
-    const confirmUrl = `http://localhost:3001/api/bookings/confirm2/${booking._id}`;
+    const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
 
     // Письмо админу
     const mailOptionsAdmin = {
