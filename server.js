@@ -119,7 +119,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       to: process.env.GMAIL_USER,
       subject: "Новая заявка на бронирование (Обычная поездка)",
       html: `
-        <h2>Новая заявка на бронирование (форма 1)</h2>
+        <h2>Новая заявка на бронирование (Обычная поездка)</h2>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -212,7 +212,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       to: process.env.GMAIL_USER,
       subject: "Новая заявка на бронирование (Почасовая аренда)",
       html: `
-        <h2>Новая заявка на бронирование (форма 2)</h2>
+        <h2>Новая заявка на бронирование (Почасовая аренда)</h2>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -256,7 +256,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
-      subject: "Ваше бронирование подтверждено (Обычная поездка)",
+      subject: "Ваше бронирование подтверждено.",
       html: `
         <h2>Спасибо, ${booking.name}!</h2>
         <p>Ваше бронирование обычной поездки подтверждено.</p>
