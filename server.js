@@ -4,10 +4,32 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 require("dotenv").config();
 const moment = require("moment-timezone");
+const i18next = require("i18next");
+const Backend = require("i18next-fs-backend");
+const middleware = require("i18next-http-middleware");
+const path = require("path");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+// Настройка i18next
+i18next
+  .use(Backend)
+  .use(middleware.LanguageDetector)
+  .init({
+    fallbackLng: "ru",
+    backend: {
+      loadPath: path.join(__dirname, "/locales/{{lng}}/translation.json"),
+    },
+    detection: {
+      // Определяем язык по заголовку Accept-Language, можно настроить куки и т.д.
+      order: ['header'],
+      caches: false
+    },
+  });
+
+  
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
+  app.use(middleware.handle(i18next));
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -16,6 +38,7 @@ mongoose
 
 // Схема для первой формы (Обычная поездка)
 const bookingSchema1 = new mongoose.Schema({
+  locale: { type: String, default: "ru" },
   from: String,
   to: String,
   date: Date,
@@ -41,6 +64,7 @@ const Booking1 = mongoose.model("Booking1", bookingSchema1);
 
 // Схема для второй формы (Почасовая аренда)
 const bookingSchema2 = new mongoose.Schema({
+  locale: { type: String, default: "ru" },
   pickupLocation: String,
   duration: Number,
   date: Date,
@@ -91,6 +115,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       garant,
       duration,
       tripPurpose,
+      locale = "fr", // Добавляем язык, по умолчанию "fr"
     } = req.body;
 
     if (!from || !date || !name || !phone || !email || !garant) {
@@ -117,6 +142,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       garant,
       duration,
       tripPurpose,
+      locale,
     });
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
@@ -185,6 +211,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       totalPrice,
       tripPurpose,
       garant,
+      locale = "fr", // Добавляем язык, по умолчанию "fr"
     } = req.body;
 
     if (
@@ -210,6 +237,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       tripPurpose,
       totalPrice,
       garant,
+      locale,
     });
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
@@ -264,6 +292,9 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
     booking.confirmed = true;
     await booking.save();
 
+     // Устанавливаем язык i18next на нужный
+    await i18next.changeLanguage(booking.locale || "fr");
+
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
@@ -276,22 +307,22 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
-      subject: "Ваше бронирование подтверждено.",
+       subject: i18next.t("email.confirmed_subject"),
       html: `
-        <h2>Спасибо, ${booking.name}!</h2>
-        <p>Ваше бронирование обычной поездки подтверждено.</p>
-        <p><b>Номер бронирования:</b> ${booking._id}</p>
-        <p><b>Имя:</b> ${booking.name}</p>
-        <p><b>Телефон:</b> ${booking.phone}</p>
-        <p><b>Email:</b> ${booking.email}</p>
-        <p><b>Дата:</b> ${parisDate}</p>
-        <p><b>Дата возвращения:</b> ${parisReturnDate || "не указана"}</p>
-        <p><b>Откуда:</b> ${booking.from}</p>
-        <p><b>Куда:</b> ${booking.to}</p>
-        <p><b>Взрослые:</b> ${booking.adults || 1}</p>
-        <p><b>Дети:</b> ${booking.children || 0}</p>
-        <p><b>Багаж:</b> ${booking.baggage ? "Да" : "Нет"}</p>
-        <p>Ждём вас!</p>
+        <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
+        <p>${i18next.t("email.booking_confirmed_1")}</p>
+        <p><b>${i18next.t("email.booking_number")}:</b> ${booking._id}</p>
+        <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
+        <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
+        <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
+        <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
+        <p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate || i18next.t("email.not_specified")}</p>
+        <p><b>${i18next.t("email.from")}:</b> ${booking.from}</p>
+        <p><b>${i18next.t("email.to")}:</b> ${booking.to}</p>
+        <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
+        <p><b>${i18next.t("email.children")}:</b> ${booking.children || 0}</p>
+        <p><b>${i18next.t("email.luggage")}:</b> ${booking.baggage ? i18next.t("email.yes") : i18next.t("email.no")}</p>
+        <p>${i18next.t("email.we_look_forward")}</p>
       `,
     };
 
@@ -316,6 +347,9 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     booking.confirmed = true;
     await booking.save();
 
+      // Устанавливаем язык i18next на нужный
+    await i18next.changeLanguage(booking.locale || "fr");
+
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
@@ -325,21 +359,21 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
-      subject: "Ваше бронирование подтверждено.",
-      html: `
-        <h2>Спасибо, ${booking.name}!</h2>
-        <p>Ваше бронирование почасовой аренды подтверждено.</p>
-        <p><b>Номер бронирования:</b> ${booking._id}</p>
-        <p><b>Имя:</b> ${booking.name}</p>
-        <p><b>Телефон:</b> ${booking.phone}</p>
-        <p><b>Email:</b> ${booking.email}</p>
-        <p><b>Дата:</b> ${parisDate}</p>
-        <p><b>Место подачи:</b> ${booking.pickupLocation}</p>
-        <p><b>Длительность:</b> ${booking.duration} ч.</p>
-        <p><b>Цена:</b> ${normPrice}</p>
-        <p>Ждём вас!</p>
-      `,
-    };
+        subject: i18next.t("email.hourly_confirmed_subject"),
+  html: `
+    <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
+    <p>${i18next.t("email.hourly_confirmed_message")}</p>
+    <p><b>${i18next.t("email.booking_number")}:</b> ${booking._id}</p>
+    <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
+    <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
+    <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
+    <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
+    <p><b>${i18next.t("email.pickup_location")}:</b> ${booking.pickupLocation}</p>
+    <p><b>${i18next.t("email.duration_hours")}:</b> ${booking.duration} ${i18next.t("email.hours_short")}</p>
+    <p><b>${i18next.t("email.price")}:</b> ${normPrice}</p>
+    <p>${i18next.t("email.we_look_forward")}</p>
+  `,
+};
 
     await transporter.sendMail(mailOptionsClient);
 

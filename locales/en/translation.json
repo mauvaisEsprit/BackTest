@@ -1,0 +1,30 @@
+{
+  "email": {
+    "confirmed_subject": "Your booking is confirmed.",
+    "thanks": "Thank you, {{name}}!",
+    "booking_confirmed_1": "Your regular trip booking is confirmed.",
+    "booking_number": "Booking number",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "date": "Date",
+    "return_date": "Return date",
+    "from": "From",
+    "to": "To",
+    "adults": "Adults",
+    "children": "Children",
+    "luggage": "Luggage",
+    "yes": "Yes",
+    "no": "No",
+    "not_specified": "not specified",
+    "we_look_forward": "Looking forward to seeing you!",
+    "confirm_success": "Booking successfully confirmed.",
+    "server_error": "Server error",
+    "hourly_confirmed_subject": "Your booking is confirmed.",
+    "hourly_confirmed_message": "Your hourly rental booking is confirmed.",
+    "pickup_location": "Pickup location",
+    "duration_hours": "Duration",
+    "hours_short": "h.",
+    "price": "Price"
+  }
+}

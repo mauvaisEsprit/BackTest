@@ -1,0 +1,30 @@
+{
+  "email": {
+    "confirmed_subject": "Votre réservation est confirmée.",
+    "thanks": "Merci, {{name}} !",
+    "booking_confirmed_1": "Votre réservation de trajet classique est confirmée.",
+    "booking_number": "Numéro de réservation",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "email": "Email",
+    "date": "Date",
+    "return_date": "Date de retour",
+    "from": "De",
+    "to": "À",
+    "adults": "Adultes",
+    "children": "Enfants",
+    "luggage": "Bagages",
+    "yes": "Oui",
+    "no": "Non",
+    "not_specified": "non spécifié",
+    "we_look_forward": "Nous vous attendons !",
+    "confirm_success": "Réservation confirmée avec succès.",
+    "server_error": "Erreur du serveur",
+    "hourly_confirmed_subject": "Votre réservation est confirmée.",
+    "hourly_confirmed_message": "Votre réservation de location horaire est confirmée.",
+    "pickup_location": "Lieu de prise en charge",
+    "duration_hours": "Durée",
+    "hours_short": "h.",
+    "price": "Prix"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "email": {
+    "confirmed_subject": "Ваше бронирование подтверждено.",
+    "thanks": "Спасибо, {{name}}!",
+    "booking_confirmed_1": "Ваше бронирование обычной поездки подтверждено.",
+    "booking_number": "Номер бронирования",
+    "name": "Имя",
+    "phone": "Телефон",
+    "email": "Email",
+    "date": "Дата",
+    "return_date": "Дата возвращения",
+    "from": "Откуда",
+    "to": "Куда",
+    "adults": "Взрослые",
+    "children": "Дети",
+    "luggage": "Багаж",
+    "yes": "Да",
+    "no": "Нет",
+    "not_specified": "не указана",
+    "we_look_forward": "Ждём вас!",
+    "confirm_success": "Бронирование успешно подтверждено.",
+    "server_error": "Ошибка сервера",
+    "hourly_confirmed_subject": "Ваше бронирование подтверждено.",
+    "hourly_confirmed_message": "Ваше бронирование почасовой аренды подтверждено.",
+    "pickup_location": "Место подачи",
+    "duration_hours": "Длительность",
+    "hours_short": "ч.",
+    "price": "Цена"
+  }
+}
