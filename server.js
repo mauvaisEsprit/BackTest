@@ -18,6 +18,9 @@ bot.on('message', (msg) => {
   console.log('Chat ID:', msg.chat.id);
 });
 
+console.log("Telegram bot initialized with token:", token);
+console.log("Бот запущен и готов принимать сообщения.");
+
 
 
 
