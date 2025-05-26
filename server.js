@@ -118,14 +118,16 @@ app.post("/api/bookings/form1", async (req, res) => {
       locale = "fr", // Добавляем язык, по умолчанию "fr"
     } = req.body;
 
-    // Генерируем уникальный ID для бронирования
-    const id = uuidv4();
+    
 
     if (!from || !date || !name || !phone || !email || !garant) {
       return res
         .status(400)
         .json({ message: "Отсутствуют обязательные поля." });
     }
+
+    // Генерируем уникальный ID для бронирования
+    const newId = uuidv4();
 
     const booking = new Booking1({
       from,
@@ -145,7 +147,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       duration,
       tripPurpose,
       locale,
-      id,
+      id: newId, // Генерируем уникальный ID, если не передан
       type: 'form1',
     });
     const parisDate = moment(booking.date)
@@ -220,7 +222,7 @@ app.post("/api/bookings/form2", async (req, res) => {
     } = req.body;
 
     // Генерируем уникальный ID для бронирования
-    const id = uuidv4();
+    
 
     if (
       !pickupLocation ||
@@ -234,6 +236,8 @@ app.post("/api/bookings/form2", async (req, res) => {
       return res.status(400).json({ message: "Отсутствуют обязательные поля" });
     }
 
+    const newId = uuidv4();
+
     const booking = new Booking2({
       pickupLocation,
       duration,
@@ -245,7 +249,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       totalPrice,
       garant,
       locale,
-      id,
+      id: newId, // Генерируем уникальный ID, если не передан
       type: "form2",
     });
     const parisDate = moment(booking.date)
@@ -325,7 +329,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       html: `
         <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
         <p>${i18next.t("email.booking_confirmed_1")}</p>
-        <p><b>${i18next.t("email.booking_number")}:</b> ${id}</p>
+        <p><b>${i18next.t("email.booking_number")}:</b> ${bookingid}</p>
         <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
         <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
         <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
@@ -377,7 +381,7 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
   html: `
     <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
     <p>${i18next.t("email.hourly_confirmed_message")}</p>
-    <p><b>${i18next.t("email.booking_number")}:</b> ${id}</p>
+    <p><b>${i18next.t("email.booking_number")}:</b> ${booking.id}</p>
     <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
     <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
     <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
