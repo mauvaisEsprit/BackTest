@@ -187,7 +187,7 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Багаж:</b> ${baggage ? "Да" : "Нет"}</p>
         <p><b>Комментарии:</b> ${comment || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
-        <p><b>Цена:</b> ${normPrice}</p>
+        <p><b>Цена:</b> ${normPrice}€</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
       `,
     };
@@ -277,7 +277,7 @@ app.post("/api/bookings/form2", async (req, res) => {
         <p><b>Длительность:</b> ${duration} ч.</p>
         <p><b>Дата:</b> ${parisDate}</p>
         <p><b>Цель поездки:</b> ${tripPurpose || "не указано"}</p>
-        <p><b>Цена:</b> ${normPrice}</p>
+        <p><b>Цена:</b> ${normPrice}€</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
         <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
       `,
@@ -340,7 +340,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
         <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
         <p><b>${i18next.t("email.children")}:</b> ${booking.children || 0}</p>
         <p><b>${i18next.t("email.luggage")}:</b> ${booking.baggage ? i18next.t("email.yes") : i18next.t("email.no")}</p>
-        <p><b>${i18next.t("email.price")}:</b> <b>${booking.price}</b></p>
+        <p><b>${i18next.t("email.price")}:</b> <b>${booking.price}€</b></p>
         <p>${i18next.t("email.we_look_forward")}</p>
       `,
     };
@@ -389,7 +389,7 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
     <p><b>${i18next.t("email.pickup_location")}:</b> ${booking.pickupLocation}</p>
     <p><b>${i18next.t("email.duration_hours")}:</b> ${booking.duration} ${i18next.t("email.hours_short")}</p>
-    <p><b>${i18next.t("email.price")}:</b> ${normPrice}</p>
+    <p><b>${i18next.t("email.price")}:</b> ${normPrice}€</p>
     <p>${i18next.t("email.we_look_forward")}</p>
   `,
 };
