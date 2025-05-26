@@ -301,9 +301,10 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
 
-    const parisReturnDate = moment(booking.returnDate)
-      .tz("Europe/Paris")
-      .format("DD/MM/YYYY HH:mm");
+    const parisReturnDate = booking.returnDate
+  ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
+  : i18next.t("email.not_specified");
+
     await booking.save();
 
     const mailOptionsClient = {
