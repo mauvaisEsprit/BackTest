@@ -340,6 +340,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
         <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
         <p><b>${i18next.t("email.children")}:</b> ${booking.children || 0}</p>
         <p><b>${i18next.t("email.luggage")}:</b> ${booking.baggage ? i18next.t("email.yes") : i18next.t("email.no")}</p>
+        <p><b>${i18next.t("email.price")}:</b> <b>${booking.price}</b></p>
         <p>${i18next.t("email.we_look_forward")}</p>
       `,
     };
