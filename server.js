@@ -421,6 +421,12 @@ app.post("/api/contact", async (req, res) => {
 });
 
 
+app.get('/ping', (req, res) => {
+  res.status(200).send('I am alive!');
+});
+
+
+
 
 // Запуск сервера
 const PORT = process.env.PORT || 3001;
