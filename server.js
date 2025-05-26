@@ -307,6 +307,10 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
 
     await booking.save();
 
+    const returnDateHtml = booking.returnDate
+  ? `<p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate || i18next.t("email.not_specified")}</p>`
+  : '';
+
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
@@ -319,7 +323,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
         <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
         <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
         <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
-        <p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate || i18next.t("email.not_specified")}</p>
+        ${returnDateHtml}
         <p><b>${i18next.t("email.from")}:</b> ${booking.from}</p>
         <p><b>${i18next.t("email.to")}:</b> ${booking.to}</p>
         <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
