@@ -16,10 +16,11 @@ const bot = new TelegramBot(token, { polling: true });
 
 bot.on('message', (msg) => {
   console.log('Chat ID:', msg.chat.id);
+  bot.sendMessage(msg.chat.id, 'Привет! Я работаю.');
 });
 
-console.log("Telegram bot initialized with token:", token);
-console.log("Бот запущен и готов принимать сообщения.");
+
+
 
 
 
