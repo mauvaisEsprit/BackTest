@@ -174,7 +174,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       subject: "Новая заявка на бронирование (Обычная поездка)",
       html: `
         <h2>Новая заявка на бронирование (Обычная поездка)</h2>
-        <p><b>Номер бронирования:</b> ${id}</p>
+        <p><b>Номер бронирования:</b> ${newId}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -269,7 +269,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       subject: "Новая заявка на бронирование (Почасовая аренда)",
       html: `
         <h2>Новая заявка на бронирование (Почасовая аренда)</h2>
-        <p><b>Номер бронирования:</b> ${id}</p>
+        <p><b>Номер бронирования:</b> ${newId}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -329,7 +329,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       html: `
         <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
         <p>${i18next.t("email.booking_confirmed_1")}</p>
-        <p><b>${i18next.t("email.booking_number")}:</b> ${bookingid}</p>
+        <p><b>${i18next.t("email.booking_number")}:</b> ${booking.id}</p>
         <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
         <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
         <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
