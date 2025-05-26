@@ -8,6 +8,7 @@ const i18next = require("i18next");
 const Backend = require("i18next-fs-backend");
 const middleware = require("i18next-http-middleware");
 const path = require("path");
+const { v4: uuidv4 } = require('uuid');
 
 // Настройка i18next
 i18next
@@ -100,7 +101,6 @@ app.post("/api/bookings/form1", async (req, res) => {
     const {
       from,
       to,
-      id,
       date,
       returnDate,
       adults,
@@ -118,6 +118,9 @@ app.post("/api/bookings/form1", async (req, res) => {
       locale = "fr", // Добавляем язык, по умолчанию "fr"
     } = req.body;
 
+    // Генерируем уникальный ID для бронирования
+    const id = uuidv4();
+
     if (!from || !date || !name || !phone || !email || !garant) {
       return res
         .status(400)
@@ -127,7 +130,6 @@ app.post("/api/bookings/form1", async (req, res) => {
     const booking = new Booking1({
       from,
       to,
-      id,
       date,
       returnDate,
       adults,
@@ -143,6 +145,8 @@ app.post("/api/bookings/form1", async (req, res) => {
       duration,
       tripPurpose,
       locale,
+      id,
+      type: 'form1',
     });
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
@@ -168,7 +172,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       subject: "Новая заявка на бронирование (Обычная поездка)",
       html: `
         <h2>Новая заявка на бронирование (Обычная поездка)</h2>
-        <p><b>Номер бронирования:</b> ${booking._id}</p>
+        <p><b>Номер бронирования:</b> ${id}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -204,7 +208,6 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     const {
       pickupLocation,
-      id,
       duration,
       date,
       name,
@@ -215,6 +218,9 @@ app.post("/api/bookings/form2", async (req, res) => {
       garant,
       locale = "fr", // Добавляем язык, по умолчанию "fr"
     } = req.body;
+
+    // Генерируем уникальный ID для бронирования
+    const id = uuidv4();
 
     if (
       !pickupLocation ||
@@ -230,7 +236,6 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     const booking = new Booking2({
       pickupLocation,
-      id,
       duration,
       date,
       name,
@@ -240,6 +245,8 @@ app.post("/api/bookings/form2", async (req, res) => {
       totalPrice,
       garant,
       locale,
+      id,
+      type: "form2",
     });
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
@@ -258,7 +265,7 @@ app.post("/api/bookings/form2", async (req, res) => {
       subject: "Новая заявка на бронирование (Почасовая аренда)",
       html: `
         <h2>Новая заявка на бронирование (Почасовая аренда)</h2>
-        <p><b>Номер бронирования:</b> ${booking._id}</p>
+        <p><b>Номер бронирования:</b> ${id}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
         <p><b>Email:</b> ${email}</p>
@@ -318,7 +325,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       html: `
         <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
         <p>${i18next.t("email.booking_confirmed_1")}</p>
-        <p><b>${i18next.t("email.booking_number")}:</b> ${booking._id}</p>
+        <p><b>${i18next.t("email.booking_number")}:</b> ${id}</p>
         <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
         <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
         <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
@@ -370,7 +377,7 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
   html: `
     <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
     <p>${i18next.t("email.hourly_confirmed_message")}</p>
-    <p><b>${i18next.t("email.booking_number")}:</b> ${booking._id}</p>
+    <p><b>${i18next.t("email.booking_number")}:</b> ${id}</p>
     <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
     <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
     <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
