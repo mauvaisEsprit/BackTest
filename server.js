@@ -167,11 +167,15 @@ app.post("/api/bookings/form1", async (req, res) => {
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
 
+    const typeOfTrip = isRoundTrip
+      ? i18next.t("email.round_trip")
+      : i18next.t("email.one_way_trip");
+
     // Письмо админу
     const mailOptionsAdmin = {
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
-      subject: "Новая заявка на бронирование (Обычная поездка)",
+      subject: `Новая заявка на бронирование (${typeOfTrip})`,
       html: `
         <h2>Новая заявка на бронирование (Обычная поездка)</h2>
         <p><b>Номер бронирования:</b> ${newId}</p>

@@ -25,6 +25,8 @@
     "pickup_location": "Место подачи",
     "duration_hours": "Длительность",
     "hours_short": "ч.",
-    "price": "Цена"
+    "price": "Цена",
+    "one_way_trip": "Обычная поездка в одну сторону",
+    "round_trip": "Обычная поездка с возвратом"
   }
 }
