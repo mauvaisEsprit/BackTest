@@ -12,7 +12,7 @@ const { v4: uuidv4 } = require('uuid');
 const TelegramBot = require("node-telegram-bot-api");
 
 const token = process.env.TELEGRAM_BOT_TOKEN; // Токен вашего бота
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token);
 
 bot.on('message', (msg) => {
   console.log('Chat ID:', msg.chat.id);
