@@ -19,7 +19,7 @@ bot.on('message', (msg) => {
   bot.sendMessage(msg.chat.id, 'Привет! Я работаю.');
 });
 
-
+bot.sendMessage(CHAT_ID, "Привет! Я твой бот и готов к работе!");
 
 
 
