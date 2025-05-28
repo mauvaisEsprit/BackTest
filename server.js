@@ -185,7 +185,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       to: process.env.GMAIL_USER,
       subject: `Новая заявка на бронирование (${typeOfTrip})`,
       html: `
-        <h2>Новая заявка на бронирование (Обычная поездка)</h2>
+        <h2>Новая заявка на бронирование (${typeOfTrip})</h2>
         <p><b>Номер бронирования:</b> ${newId}</p>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
