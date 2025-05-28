@@ -12,7 +12,6 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
-    "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "i18next": "^25.2.1",
@@ -20,7 +19,6 @@
     "i18next-http-middleware": "^3.7.4",
     "moment-timezone": "^0.6.0",
     "mongoose": "^8.15.0",
-    "node-telegram-bot-api": "^0.66.0",
     "nodemailer": "^7.0.3",
     "uuid": "^11.1.0"
   },
