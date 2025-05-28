@@ -11,15 +11,8 @@ const path = require("path");
 const { v4: uuidv4 } = require('uuid');
 const TelegramBot = require("node-telegram-bot-api");
 
-const token = process.env.TELEGRAM_BOT_TOKEN; // Токен вашего бота
-const bot = new TelegramBot(token, { polling: true });
 
-bot.on('message', (msg) => {
-  console.log('Chat ID:', msg.chat.id);
-  bot.sendMessage(msg.chat.id, 'Привет! Я работаю.');
-});
 
-bot.sendMessage(process.env.CHAT_ID, "Привет! Я твой бот и готов к работе!");
 
 
 
