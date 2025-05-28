@@ -9,7 +9,7 @@ const Backend = require("i18next-fs-backend");
 const middleware = require("i18next-http-middleware");
 const path = require("path");
 const { v4: uuidv4 } = require('uuid');
-const TelegramBot = require("node-telegram-bot-api");
+//const TelegramBot = require("node-telegram-bot-api");
 
 
 
