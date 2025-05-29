@@ -71,7 +71,7 @@ const bookingSchema1 = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Booking1 = mongoose.model("Booking1", bookingSchema1);
+const Booking1 = mongoose.model("Booking1", bookingSchema1, "bookings");
 
 // Схема для второй формы (Почасовая аренда)
 const bookingSchema2 = new mongoose.Schema({
@@ -90,7 +90,7 @@ const bookingSchema2 = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Booking2 = mongoose.model("Booking2", bookingSchema2);
+const Booking2 = mongoose.model("Booking2", bookingSchema2, "bookings");
 
 // Настройка nodemailer
 const transporter = nodemailer.createTransport({
