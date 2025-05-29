@@ -59,7 +59,7 @@ const bookingSchema1 = new mongoose.Schema({
   name: String,
   phone: String,
   email: String,
-  baggage: String,
+  baggage: Boolean,
   comment: String,
   isRoundTrip: Boolean,
   price: Number,
