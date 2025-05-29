@@ -194,7 +194,7 @@ app.post("/api/bookings/form1", async (req, res) => {
         ? booking.price.toFixed(2)
         : "не указано";
 
-    const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
+    //const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
 
     const typeOfTrip = isRoundTrip
       ? i18next.t("email.round_trip")
@@ -293,7 +293,7 @@ app.post("/api/bookings/form2", async (req, res) => {
 
     const normPrice = booking.totalPrice;
 
-    const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
+    //const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
 
     // Письмо админу
     const mailOptionsAdmin = {
@@ -328,7 +328,7 @@ app.post("/api/bookings/form2", async (req, res) => {
 });
 
 // --- Подтверждение бронирования формы 1 ---
-app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
+/*app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
   try {
     const booking = await Booking1.findById(req.params.id);
     if (!booking) return res.status(404).send("Заявка не найдена");
@@ -443,7 +443,7 @@ app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
     console.error(error);
     res.status(500).send("Ошибка сервера");
   }
-});
+});*/
 
 app.post("/api/contact", async (req, res) => {
   try {
@@ -501,6 +501,94 @@ app.post("/api/auth/login", (req, res) => {
 
   return res.status(401).json({ message: "Неверный логин или пароль" });
 });
+
+
+app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
+  try {
+    const type = req.query.type || "standard";
+
+    const bookingModel = type === "hourly" ? Booking2 : Booking1;
+    const booking = await bookingModel.findById(req.params.id);
+    if (!booking) return res.status(404).send("Заявка не найдена");
+    if (booking.confirmed) return res.send("Заявка уже подтверждена");
+
+    booking.confirmed = true;
+    await booking.save();
+
+    await i18next.changeLanguage(booking.locale || "fr");
+
+    const parisDate = moment(booking.date)
+      .tz("Europe/Paris")
+      .format("DD/MM/YYYY HH:mm");
+
+    let emailContent;
+
+    if (type === "hourly") {
+      emailContent = {
+        subject: i18next.t("email.hourly_confirmed_subject"),
+        html: `
+          <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
+          <p>${i18next.t("email.hourly_confirmed_message")}</p>
+          <p><b>${i18next.t("email.booking_number")}:</b> ${booking.id}</p>
+          <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
+          <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
+          <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
+          <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
+          <p><b>${i18next.t("email.pickup_location")}:</b> ${booking.pickupLocation}</p>
+          <p><b>${i18next.t("email.duration_hours")}:</b> ${booking.duration} ${i18next.t("email.hours_short")}</p>
+          <p><b>${i18next.t("email.price")}:</b> ${booking.totalPrice}€</p>
+          <p>${i18next.t("email.we_look_forward")}</p>
+        `,
+      };
+    } else {
+      const parisReturnDate = booking.returnDate
+        ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
+        : i18next.t("email.not_specified");
+
+      const returnDateHtml = booking.returnDate
+        ? `<p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate}</p>`
+        : "";
+
+      emailContent = {
+        subject: i18next.t("email.confirmed_subject"),
+        html: `
+          <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
+          <p>${i18next.t("email.booking_confirmed_1")}</p>
+          <p><b>${i18next.t("email.booking_number")}:</b> ${booking.id}</p>
+          <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
+          <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
+          <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
+          <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
+          ${returnDateHtml}
+          <p><b>${i18next.t("email.from")}:</b> ${booking.from}</p>
+          <p><b>${i18next.t("email.to")}:</b> ${booking.to}</p>
+          <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
+          <p><b>${i18next.t("email.children")}:</b> ${booking.children || 0}</p>
+          <p><b>${i18next.t("email.luggage")}:</b> ${
+            booking.baggage ? i18next.t("email.yes") : i18next.t("email.no")
+          }</p>
+          <p><b>${i18next.t("email.price")}:</b> <b>${booking.price}€</b></p>
+          <p>${i18next.t("email.we_look_forward")}</p>
+        `,
+      };
+    }
+
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: booking.email,
+      subject: emailContent.subject,
+      html: emailContent.html,
+    });
+
+    res.send("Бронирование успешно подтверждено.");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Ошибка сервера");
+  }
+});
+
+
+
 
 app.get("/api/admin/bookings", isAdmin, async (req, res) => {
   try {
