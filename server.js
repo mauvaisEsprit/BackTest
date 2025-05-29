@@ -601,7 +601,7 @@ app.get("/api/admin/bookings", isAdmin, async (req, res) => {
 
 
 // Удалить бронирование
-app.delete("/api/admin//bookings/:id", isAdmin, async (req, res) => {
+app.delete("/api/admin/bookings/:id", isAdmin, async (req, res) => {
   try {
     await Booking.findByIdAndDelete(req.params.id);
     res.sendStatus(204);
