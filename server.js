@@ -393,7 +393,7 @@ app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
 });
 
 // --- Подтверждение бронирования формы 2 ---
-app.post("/api/admin/bookings2/:id/confirm", isAdmin, async (req, res) => {
+app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
   try {
     const booking = await Booking2.findById(req.params.id);
     if (!booking) return res.status(404).send("Заявка не найдена");
