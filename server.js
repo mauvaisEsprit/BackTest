@@ -117,7 +117,7 @@ const getAllBookings = async (req, res) => {
 };
 
 
-app.get("/api/admin/bookings", isAdmin, getAllBookings);
+/*app.get("/api/admin/bookings", isAdmin, getAllBookings);*/
 
 
 
@@ -590,14 +590,14 @@ app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
 
 
 
-/*app.get("/api/admin/bookings", isAdmin, async (req, res) => {
+app.get("/api/admin/bookings", isAdmin, async (req, res) => {
   try {
     const bookings = await Booking.find();
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});*/
+});
 
 
 // Удалить бронирование
