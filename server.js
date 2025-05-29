@@ -511,26 +511,6 @@ app.get("/api/admin/bookings", isAdmin, async (req, res) => {
   }
 });
 
-// Подтвердить бронирование
-app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
-  try {
-    const booking = await Booking.findById(req.params.id);
-    if (!booking) return res.sendStatus(404);
-
-    booking.confirmed = true;
-    await booking.save();
-
-    await sendEmailToClient(
-      booking.email,
-      "Бронирование подтверждено",
-      `Номер вашей брони: ${booking._id}`
-    );
-
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 
 // Удалить бронирование
 app.delete("/api/admin//bookings/:id", isAdmin, async (req, res) => {
