@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Booking = require('../models/Booking');
+const Booking = require('../models/booking');
 const isAdmin = require('../middleware/isAdmin');
 const sendEmailToClient = require('../utils/sendEmailToClient');
 
@@ -35,7 +35,7 @@ router.post('/bookings/:id/confirm', isAdmin, async (req, res) => {
   }
 });
 
-// Удалить бронирование (по желанию)
+// Удалить бронирование
 router.delete('/bookings/:id', isAdmin, async (req, res) => {
   try {
     await Booking.findByIdAndDelete(req.params.id);

@@ -456,8 +456,9 @@ app.get('/ping', (req, res) => {
   res.status(200).send('I am alive!');
 });
 
-// Подключение роутов
-app.use('/api/admin', adminRoutes);
+// Роуты
+app.use('/api/auth', require('./routes/adminAuth'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 
 // Запуск сервера
