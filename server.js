@@ -105,7 +105,7 @@ const getAllBookings = async (req, res) => {
     const bookings1 = await Booking1.find().sort({ createdAt: -1 });
     const bookings2 = await Booking2.find().sort({ createdAt: -1 });
 
-    const allBookings = [...bookings1].sort((a, b) => {
+    const allBookings = [...bookings1, ...bookings2].sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
