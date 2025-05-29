@@ -327,8 +327,8 @@ app.post("/api/bookings/form2", async (req, res) => {
   }
 });
 
-// --- Подтверждение бронирования формы 1 ---
-/*app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
+// --- Подтверждение бронирования формы 1 --- //
+app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
   try {
     const booking = await Booking1.findById(req.params.id);
     if (!booking) return res.status(404).send("Заявка не найдена");
@@ -443,7 +443,7 @@ app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
     console.error(error);
     res.status(500).send("Ошибка сервера");
   }
-});*/
+});
 
 app.post("/api/contact", async (req, res) => {
   try {
@@ -503,7 +503,7 @@ app.post("/api/auth/login", (req, res) => {
 });
 
 
-app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
+/*app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
   try {
     const type = req.query.type || "standard";
 
@@ -585,7 +585,7 @@ app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
     console.error(error);
     res.status(500).send("Ошибка сервера");
   }
-});
+});*/
 
 
 
