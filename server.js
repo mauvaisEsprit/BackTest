@@ -8,17 +8,11 @@ const i18next = require("i18next");
 const Backend = require("i18next-fs-backend");
 const middleware = require("i18next-http-middleware");
 const path = require("path");
-const { v4: uuidv4 } = require('uuid');
-//const TelegramBot = require("node-telegram-bot-api");
+const { v4: uuidv4 } = require("uuid");
+const jwt = require("jsonwebtoken");
 
-const adminRoutes = require("./routes/adminRoutes");
-
-
-
-
-
-
-
+//const adminRoutes = require("./routes/adminRoutes");
+const isAdmin = require("./middleware/isAdmin");
 
 // Настройка i18next
 i18next
@@ -31,16 +25,17 @@ i18next
     },
     detection: {
       // Определяем язык по заголовку Accept-Language, можно настроить куки и т.д.
-      order: ['header'],
-      caches: false
+      order: ["header"],
+      caches: false,
     },
   });
 
-  
-  const app = express();
-  app.use(cors());
-  app.use(express.json());
-  app.use(middleware.handle(i18next));
+ 
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(middleware.handle(i18next));
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -101,8 +96,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-
 // --- Первый роут — обычная поездка ---
 app.post("/api/bookings/form1", async (req, res) => {
   try {
@@ -127,8 +120,6 @@ app.post("/api/bookings/form1", async (req, res) => {
       tripPurpose,
       locale = "fr", // Добавляем язык, по умолчанию "fr"
     } = req.body;
-
-    
 
     if (!from || !date || !name || !phone || !email || !garant) {
       return res
@@ -158,7 +149,7 @@ app.post("/api/bookings/form1", async (req, res) => {
       tripPurpose,
       locale,
       id: newId, // Генерируем уникальный ID, если не передан
-      type: 'form1',
+      type: "form1",
     });
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
@@ -166,14 +157,15 @@ app.post("/api/bookings/form1", async (req, res) => {
     await booking.save();
 
     const parisReturnDate = booking.returnDate
-  ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
-  : i18next.t("email.not_specified");
+      ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
+      : i18next.t("email.not_specified");
 
     await booking.save();
 
     const normPrice =
-      typeof booking.price === "number" ? booking.price.toFixed(2) : "не указано";
-
+      typeof booking.price === "number"
+        ? booking.price.toFixed(2)
+        : "не указано";
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm1/${booking._id}`;
 
@@ -195,14 +187,16 @@ app.post("/api/bookings/form1", async (req, res) => {
         <p><b>Откуда:</b> ${from}</p>
         <p><b>Куда:</b> ${to}</p>
         <p><b>Дата:</b> ${parisDate}</p>
-        <p><b>Обратная дата:</b> ${isRoundTrip ? parisReturnDate : "не указана"}</p>
+        <p><b>Обратная дата:</b> ${
+          isRoundTrip ? parisReturnDate : "не указана"
+        }</p>
         <p><b>Взрослые:</b> ${adults || 0}</p>
         <p><b>Дети:</b> ${children || 0}</p>
         <p><b>Багаж:</b> ${baggage ? "Да" : "Нет"}</p>
         <p><b>Комментарии:</b> ${comment || "не указано"}</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
         <p><b>Цена:</b> ${normPrice}€</p>
-        <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
+        
       `,
     };
 
@@ -236,7 +230,6 @@ app.post("/api/bookings/form2", async (req, res) => {
     } = req.body;
 
     // Генерируем уникальный ID для бронирования
-    
 
     if (
       !pickupLocation ||
@@ -271,7 +264,6 @@ app.post("/api/bookings/form2", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
     await booking.save();
 
-    
     const normPrice = booking.totalPrice;
 
     const confirmUrl = `https://backtest1-0501.onrender.com/api/bookings/confirm2/${booking._id}`;
@@ -293,7 +285,7 @@ app.post("/api/bookings/form2", async (req, res) => {
         <p><b>Цель поездки:</b> ${tripPurpose || "не указано"}</p>
         <p><b>Цена:</b> ${normPrice}€</p>
         <p><b>Согласие с условиями:</b> ${garant ? "Да" : "Нет"}</p>
-        <p>Подтвердить заявку: <a href="${confirmUrl}">Подтвердить бронирование</a></p>
+        
       `,
     };
 
@@ -309,7 +301,7 @@ app.post("/api/bookings/form2", async (req, res) => {
 });
 
 // --- Подтверждение бронирования формы 1 ---
-app.get("/api/bookings/confirm1/:id", async (req, res) => {
+app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
   try {
     const booking = await Booking1.findById(req.params.id);
     if (!booking) return res.status(404).send("Заявка не найдена");
@@ -319,7 +311,7 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
     booking.confirmed = true;
     await booking.save();
 
-     // Устанавливаем язык i18next на нужный
+    // Устанавливаем язык i18next на нужный
     await i18next.changeLanguage(booking.locale || "fr");
 
     const parisDate = moment(booking.date)
@@ -327,19 +319,21 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
       .format("DD/MM/YYYY HH:mm");
 
     const parisReturnDate = booking.returnDate
-  ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
-  : i18next.t("email.not_specified");
+      ? moment(booking.returnDate).tz("Europe/Paris").format("DD/MM/YYYY HH:mm")
+      : i18next.t("email.not_specified");
 
     await booking.save();
 
     const returnDateHtml = booking.returnDate
-  ? `<p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate || i18next.t("email.not_specified")}</p>`
-  : '';
+      ? `<p><b>${i18next.t("email.return_date")}:</b> ${
+          parisReturnDate || i18next.t("email.not_specified")
+        }</p>`
+      : "";
 
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
-       subject: i18next.t("email.confirmed_subject"),
+      subject: i18next.t("email.confirmed_subject"),
       html: `
         <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
         <p>${i18next.t("email.booking_confirmed_1")}</p>
@@ -353,12 +347,15 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
         <p><b>${i18next.t("email.to")}:</b> ${booking.to}</p>
         <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 1}</p>
         <p><b>${i18next.t("email.children")}:</b> ${booking.children || 0}</p>
-        <p><b>${i18next.t("email.luggage")}:</b> ${booking.baggage ? i18next.t("email.yes") : i18next.t("email.no")}</p>
+        <p><b>${i18next.t("email.luggage")}:</b> ${
+        booking.baggage ? i18next.t("email.yes") : i18next.t("email.no")
+      }</p>
         <p><b>${i18next.t("email.price")}:</b> <b>${booking.price}€</b></p>
         <p>${i18next.t("email.we_look_forward")}</p>
       `,
     };
 
+    console.log("Sending confirmation email to client:", mailOptionsClient);
     await transporter.sendMail(mailOptionsClient);
 
     res.send("Бронирование успешно подтверждено.");
@@ -368,9 +365,8 @@ app.get("/api/bookings/confirm1/:id", async (req, res) => {
   }
 });
 
-
 // --- Подтверждение бронирования формы 2 ---
-app.get("/api/bookings/confirm2/:id", async (req, res) => {
+app.post("/api/admin/bookings2/:id/confirm", isAdmin, async (req, res) => {
   try {
     const booking = await Booking2.findById(req.params.id);
     if (!booking) return res.status(404).send("Заявка не найдена");
@@ -380,20 +376,20 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     booking.confirmed = true;
     await booking.save();
 
-      // Устанавливаем язык i18next на нужный
+    // Устанавливаем язык i18next на нужный
     await i18next.changeLanguage(booking.locale || "fr");
 
     const parisDate = moment(booking.date)
       .tz("Europe/Paris")
       .format("DD/MM/YYYY HH:mm");
 
-      const normPrice = booking.totalPrice;
+    const normPrice = booking.totalPrice;
 
     const mailOptionsClient = {
       from: process.env.GMAIL_USER,
       to: booking.email,
-        subject: i18next.t("email.hourly_confirmed_subject"),
-  html: `
+      subject: i18next.t("email.hourly_confirmed_subject"),
+      html: `
     <h2>${i18next.t("email.thanks", { name: booking.name })}</h2>
     <p>${i18next.t("email.hourly_confirmed_message")}</p>
     <p><b>${i18next.t("email.booking_number")}:</b> ${booking.id}</p>
@@ -401,13 +397,18 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
     <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
     <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
-    <p><b>${i18next.t("email.pickup_location")}:</b> ${booking.pickupLocation}</p>
-    <p><b>${i18next.t("email.duration_hours")}:</b> ${booking.duration} ${i18next.t("email.hours_short")}</p>
+    <p><b>${i18next.t("email.pickup_location")}:</b> ${
+        booking.pickupLocation
+      }</p>
+    <p><b>${i18next.t("email.duration_hours")}:</b> ${
+        booking.duration
+      } ${i18next.t("email.hours_short")}</p>
     <p><b>${i18next.t("email.price")}:</b> ${normPrice}€</p>
     <p>${i18next.t("email.we_look_forward")}</p>
   `,
-};
+    };
 
+    console.log("Sending confirmation email to client:", mailOptionsClient);
     await transporter.sendMail(mailOptionsClient);
 
     res.send("Бронирование успешно подтверждено.");
@@ -416,8 +417,6 @@ app.get("/api/bookings/confirm2/:id", async (req, res) => {
     res.status(500).send("Ошибка сервера");
   }
 });
-
-
 
 app.post("/api/contact", async (req, res) => {
   try {
@@ -451,15 +450,70 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-
-app.get('/ping', (req, res) => {
-  res.status(200).send('I am alive!');
+app.get("/ping", (req, res) => {
+  res.status(200).send("I am alive!");
 });
 
 // Роуты
-app.use('/api/auth', require('./routes/adminAuth'));
-app.use('/api/admin', require('./routes/adminRoutes'));
+app.post("/api/auth/login", (req, res) => {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ message: "Введите email и пароль" });
+  }
+
+  if (
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    const token = jwt.sign({ role: "admin", email }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+    return res.json({ token });
+  }
+
+  return res.status(401).json({ message: "Неверный логин или пароль" });
+});
+
+app.get("/api/admin/bookings", isAdmin, async (req, res) => {
+  try {
+    const bookings = await Booking.find();
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Подтвердить бронирование
+app.post("/api/admin/bookings/:id/confirm", isAdmin, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.sendStatus(404);
+
+    booking.confirmed = true;
+    await booking.save();
+
+    await sendEmailToClient(
+      booking.email,
+      "Бронирование подтверждено",
+      `Номер вашей брони: ${booking._id}`
+    );
+
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Удалить бронирование
+app.delete("/api/admin//bookings/:id", isAdmin, async (req, res) => {
+  try {
+    await Booking.findByIdAndDelete(req.params.id);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // Запуск сервера
 const PORT = process.env.PORT || 3001;
