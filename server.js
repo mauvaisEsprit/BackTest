@@ -11,6 +11,8 @@ const path = require("path");
 const { v4: uuidv4 } = require('uuid');
 //const TelegramBot = require("node-telegram-bot-api");
 
+const adminRoutes = require("./routes/adminRoutes");
+
 
 
 
@@ -454,7 +456,8 @@ app.get('/ping', (req, res) => {
   res.status(200).send('I am alive!');
 });
 
-
+// Подключение роутов
+app.use('/api/admin', adminRoutes);
 
 
 // Запуск сервера
