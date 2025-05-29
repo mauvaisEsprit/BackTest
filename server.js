@@ -96,6 +96,33 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+
+
+
+const getAllBookings = async (req, res) => {
+  try {
+    const bookings1 = await Booking1.find().sort({ createdAt: -1 });
+    const bookings2 = await Booking2.find().sort({ createdAt: -1 });
+
+    const allBookings = [...bookings1, ...bookings2].sort((a, b) => {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    res.status(200).json(allBookings);
+  } catch (error) {
+    console.error("Ошибка при получении заявок:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+};
+
+
+app.get("/api/admin/bookings", isAdmin, getAllBookings);
+
+
+
+
+
 // --- Первый роут — обычная поездка ---
 app.post("/api/bookings/form1", async (req, res) => {
   try {
