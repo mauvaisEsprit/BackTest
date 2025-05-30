@@ -23,7 +23,6 @@ exports.createHourlyBooking = async (req, res) => {
 exports.getHourlyBookings = async (req, res) => {
   try {
     const bookings = await Booking2.find().sort({ createdAt: -1 });
-    console.log("Полученные заявки на аренду:", bookings);
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ error: "Ошибка при получении данных аренды" });
