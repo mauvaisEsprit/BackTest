@@ -3,13 +3,11 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-console.log('ENV EMAIL:', process.env.ADMIN_EMAIL);
-console.log('ENV PASSWORD:', process.env.ADMIN_PASSWORD);
 if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
   console.error('Не заданы переменные окружения ADMIN_EMAIL и ADMIN_PASSWORD');
 }
 
-router.post('/login', (req, res) => {
+router.post('/', (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {

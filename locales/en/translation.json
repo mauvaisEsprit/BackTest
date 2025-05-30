@@ -1,5 +1,7 @@
 {
   "email": {
+    "new_booking_subject": " Your request has been received and is being processed",  
+    "new_booking_title": "Booking request received.",
     "confirmed_subject": "Your booking is confirmed.",
     "thanks": "Thank you, {{name}}!",
     "booking_confirmed_1": "Your regular trip booking is confirmed.",
@@ -13,7 +15,7 @@
     "to": "To",
     "adults": "Adults",
     "children": "Children",
-    "luggage": "Luggage",
+    "baggage": "Luggage",
     "yes": "Yes",
     "no": "No",
     "not_specified": "not specified",
@@ -25,7 +27,12 @@
     "pickup_location": "Pickup location",
     "duration_hours": "Duration",
     "hours_short": "h.",
-    "price": "Price"
+    "price": "Price",
+    "comment": "Comment",
+    "garant": "Consent to the terms",
+    "one_way_trip": "Regular trip in one direction",
+    "round_trip": "Regular trip with return",
+    "type_of_trip": "Type of trip"
 
   }
 }

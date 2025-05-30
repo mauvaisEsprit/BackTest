@@ -1,5 +1,7 @@
 {
   "email": {
+    "new_booking_subject": "Votre demande a été reçue et est en cours de traitement",
+    "new_booking_title": "Demande de réservation reçue.",
     "confirmed_subject": "Votre réservation est confirmée.",
     "thanks": "Merci, {{name}} !",
     "booking_confirmed_1": "Votre réservation de trajet classique est confirmée.",
@@ -13,7 +15,7 @@
     "to": "À",
     "adults": "Adultes",
     "children": "Enfants",
-    "luggage": "Bagages",
+    "baggage": "Bagages",
     "yes": "Oui",
     "no": "Non",
     "not_specified": "non spécifié",
@@ -25,7 +27,12 @@
     "pickup_location": "Lieu de prise en charge",
     "duration_hours": "Durée",
     "hours_short": "h.",
-    "price": "Prix"
+    "price": "Prix",
+    "garant": "Consentement aux conditions",
+    "one_way_trip": "Trajet classique aller simple",
+    "round_trip": "Trajet classique aller-retour",
+    "comment": "Commentaire",
+    "type_of_trip": "Type de trajet"
     
   }
 }
