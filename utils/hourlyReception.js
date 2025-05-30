@@ -32,7 +32,6 @@ async function sendHourlyBookingReceptionEmail(booking) {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log("Email отправлен клиенту:", info.response);
     return true;
   } catch (error) {
     console.error("Ошибка отправки email клиенту:", error);

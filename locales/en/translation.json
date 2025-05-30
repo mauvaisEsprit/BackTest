@@ -32,7 +32,12 @@
     "garant": "Consent to the terms",
     "one_way_trip": "Regular trip in one direction",
     "round_trip": "Regular trip with return",
-    "type_of_trip": "Type of trip"
+    "type_of_trip": "Type of trip",
+    "reply_subject": "Thank you for your message",
+  "reply_greeting": "Hello, {{name}}!",
+  "reply_body": "Thank you for your message. We will contact you shortly.",
+  "your_message": "Your message",
+  "reply_closing": "Best regards,<br/>Support team"
 
   }
 }

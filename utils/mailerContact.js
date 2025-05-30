@@ -1,19 +1,25 @@
 const transporter = require("../config/transporter");
-const i18next = require("../config/i18n"); // импортируем i18next
-
+const i18next = require("../config/i18n");
 
 async function sendReplyToClientEmail(message) {
-  await i18next.changeLanguage(booking.locale || "fr");
+  await i18next.changeLanguage(message.locale || "fr");
+
+  const subject = i18next.t("email.reply_subject");
+  const greeting = i18next.t("email.reply_greeting", { name: message.name });
+  const body = i18next.t("email.reply_body");
+  const yourMessage = i18next.t("email.your_message");
+  const closing = i18next.t("email.reply_closing");
+
   const mailOptions = {
     from: process.env.GMAIL_USER,
-    to: message.email,  // письмо идёт клиенту
-    subject: "Спасибо за ваше сообщение",
+    to: message.email,
+    subject: subject,
     html: `
-      <h2>Здравствуйте, ${message.name}!</h2>
-      <p>Спасибо за ваше сообщение. Мы свяжемся с вами в ближайшее время.</p>
-      <p>Ваше сообщение:</p>
+      <h2>${greeting}</h2>
+      <p>${body}</p>
+      <p>${yourMessage}:</p>
       <blockquote>${message.message}</blockquote>
-      <p>С уважением,<br/>Команда поддержки</p>
+      <p>${closing}</p>
     `,
   };
 

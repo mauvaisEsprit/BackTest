@@ -32,7 +32,6 @@ async function sendHourlyBookingConfirmationEmail(booking) {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log('Confirmation email sent to client for hourly booking');
   } catch (error) {
     console.error('Error sending hourly booking confirmation email:', error);
     throw error; // пробрасываем ошибку дальше, если надо
