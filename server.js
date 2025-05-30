@@ -22,13 +22,12 @@ app.use("/api/messages", messageRoutes);
 const adminRoutes = require("./routes/adminAuth");
 app.use("/api/admin", adminRoutes);
 
-/*app.get("/ping", (req, res) => {
-  res.status(200).send("I am alive!");
-});*/
+const pingRoute = require("./routes/pingRoute");
+app.use("/", pingRoute);
 
 
 // Запуск сервера
-const PORT = /*process.env.PORT*/3001 || 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
