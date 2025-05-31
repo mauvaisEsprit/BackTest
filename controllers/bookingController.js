@@ -3,16 +3,72 @@ const { v4: uuidv4 } = require('uuid');
 const { sendBookingReceivedEmail } = require("../utils/bookingReception");
 const { sendConfirmationMail } = require("../utils/bookingConfirmation");
 const i18next = require("../config/i18n");
+const Prices = require("../models/prices");
+const calculatePrice = require("../utils/calculatePrice");
 
 // ➕ Создание бронирования
 exports.createBooking = async (req, res) => {
   try {
     const locale = req.body.locale || 'ru'; // Устанавливаем язык по умолчанию
     const bookingNumber = uuidv4();
-     const booking = new Booking1({
+     
+
+    const { from, to, price } = req.body;
+
+    if (!from || !to) {
+      return res.status(400).json({ error: "Адреса отправления и прибытия обязательны" });
+    }
+
+      // Геокодирование
+    const [fromRes, toRes] = await Promise.all([
+      axios.get("https://nominatim.openstreetmap.org/search", {
+        params: { q: from, format: "json", limit: 1 },
+      }),
+      axios.get("https://nominatim.openstreetmap.org/search", {
+        params: { q: to, format: "json", limit: 1 },
+      }),
+    ]);
+
+    const fromCoords = fromRes.data[0];
+    const toCoords = toRes.data[0];
+
+    if (!fromCoords || !toCoords) {
+      return res.status(400).json({ error: "Не удалось найти координаты по адресу" });
+    }
+
+    console.log("Координаты отправления:", fromCoords);
+    console.log("Координаты прибытия:", toCoords);
+
+
+    // Построение маршрута
+    const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${fromCoords.lon},${fromCoords.lat};${toCoords.lon},${toCoords.lat}?overview=false`;
+
+    const osrmRes = await axios.get(osrmUrl);
+    const route = osrmRes.data.routes[0];
+
+    const distanceKm = route.distance / 1000;
+    const durationMin = route.duration / 60;
+
+    console.log("Расстояние (км):", distanceKm);
+    console.log("Продолжительность (мин):", durationMin);
+    console.log("Цена из фронта:", price);
+    console.log("Цены из базы:", Prices);
+
+    // Получение цен из настроек
+    const prices = await Prices.findOne();
+ const fare = calculatePrice(distanceKm, prices);
+    console.log("Расчетная цена из функции:", fare);
+
+    // Проверка цены
+    if (price < fare) {
+  return res.status(400).json({ error: i18next.t("booking.priceError") });
+}
+
+  const booking = new Booking1({
       ...req.body,
       bookingNumber,
       locale, 
+      price: fare, // Используем рассчитанную цену
     });
 
     await booking.save();
