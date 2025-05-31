@@ -7,7 +7,7 @@ exports.getPrices = async (req, res) => {
     let prices = await Prices.findOne({ locale: req.query.locale || 'fr' });
     if (!prices) {
 
-        prices  = await Settings.create({
+        prices  = await Prices.create({
         pricePerKm: 1.5,
         pricePerMin: 0.3,
         minFare: 5,
