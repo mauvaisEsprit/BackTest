@@ -37,7 +37,8 @@
   "reply_greeting": "Hello, {{name}}!",
   "reply_body": "Thank you for your message. We will contact you shortly.",
   "your_message": "Your message",
-  "reply_closing": "Best regards,<br/>Support team"
+  "reply_closing": "Best regards,<br/>Support team",
+  "rightsReserved": "All rights reserved."
 
   }
 }

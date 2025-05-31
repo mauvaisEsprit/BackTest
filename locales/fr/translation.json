@@ -37,7 +37,8 @@
     "reply_greeting": "Bonjour, {{name}} !",
     "reply_body": "Merci pour votre message. Nous vous contacterons dans les plus brefs délais.",
     "your_message": "Votre message",
-    "reply_closing": "Cordialement,<br/>L'équipe support"
+    "reply_closing": "Cordialement,<br/>L'équipe support",
+    "rightsReserved": "Tous droits réservés."
     
   }
 }

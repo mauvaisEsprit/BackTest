@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
-  locale: { type: String, default: "ru" },
+  locale: { type: String, default: "fr" },
   name: String,
   email: String,
   phone: String,

@@ -28,7 +28,7 @@ async function sendReplyToClientEmail(message) {
       <p style="font-size: 16px; color: #555; margin-top: 30px;">${closing}</p>
 
       <hr style="margin: 40px 0;" />
-      <p style="font-size: 12px; color: #aaa; text-align: center;">© ${new Date().getFullYear()} VTC Service</p>
+      <p style="font-size: 12px; color: #aaa; text-align: center;">© ${new Date().getFullYear()} Blue Coast. ${i18next.t("email.rightsReserved")}</p>
     </div>
   `,
   };
