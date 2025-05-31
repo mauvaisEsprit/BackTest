@@ -3,7 +3,7 @@ const calculatePrice = (distanceInKm, Prices, isRoundTrip) => {
 
   let basePrice = Prices.pricePerKm;
   let minPriceForEnter = Prices.minFare;
-  let coefForRoundTrip = Prices.coefForRoundTrip || 1;
+  let coefForRoundTrip = Prices.coefForRoundTrip 
   let pricePerKm;
 
   if (distanceInKm <= 100) {
