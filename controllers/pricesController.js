@@ -33,7 +33,7 @@ exports.updatePrices = async (req, res) => {
     if (typeof pricePerHour === 'number') updates.pricePerHour = roundTo2(pricePerHour);
     if (typeof pricePerKm === 'number') updates.pricePerKm = roundTo2(pricePerKm);
     if (typeof minFare === 'number') updates.minFare = roundTo2(minFare);
-    if (typeof coefForRoundTrip === 'number') updates.pricePerMin = roundTo2(coefForRoundTrip);
+    if (typeof coefForRoundTrip === 'number') updates.coefForRoundTrip = roundTo2(coefForRoundTrip);
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({ error: "Нечего обновлять: ни одно поле не передано или неверного типа" });
