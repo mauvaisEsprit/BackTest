@@ -37,8 +37,7 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ error: "Не удалось найти координаты по адресу" });
     }
 
-    console.log("Координаты отправления:", fromCoords);
-    console.log("Координаты прибытия:", toCoords);
+    
 
 
     // Построение маршрута
@@ -53,7 +52,7 @@ exports.createBooking = async (req, res) => {
     console.log("Расстояние (км):", distanceKm);
     console.log("Продолжительность (мин):", durationMin);
     console.log("Цена из фронта:", price);
-    console.log("Цены из базы:", Prices);
+    console.log("Цены из базы:", Prices.pricePerKm, Prices.minFare);
 
     // Получение цен из настроек
     const prices = await Prices.findOne();
@@ -62,14 +61,14 @@ exports.createBooking = async (req, res) => {
 
     // Проверка цены
     if (price < fare) {
-  return res.status(400).json({ error: i18next.t("booking.priceError") });
+  console.log("Цена из формы меньше минимальной цены");
 }
 
   const booking = new Booking1({
       ...req.body,
       bookingNumber,
       locale, 
-      price: fare, // Используем рассчитанную цену
+      priceServer: fare, // Используем рассчитанную цену
     });
 
     await booking.save();

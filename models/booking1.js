@@ -17,6 +17,7 @@ const bookingSchema1 = new mongoose.Schema({
   comment: String,
   isRoundTrip: Boolean,
   price: Number,
+  priceServer: Number,
   duration: Number,
   bookingNumber: { type: String, required: true, unique: true },
   id:  String,
