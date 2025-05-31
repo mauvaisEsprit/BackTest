@@ -20,7 +20,7 @@ const calculatePrice = (distanceInKm, Prices, isRoundTrip) => {
     adjustedPrice = minPriceForEnter;
   }
 
-  const numericPrice = Number(price);
+  const numericPrice = Number(adjustedPrice);
   const price = !isNaN(numericPrice)
     ? isRoundTrip
       ? numericPrice * coefForRoundTrip
