@@ -24,7 +24,7 @@ exports.getPrices = async (req, res) => {
 exports.updatePrices = async (req, res) => {
   try {
     const locale = (req.query.locale || 'fr').toLowerCase();
-    const { pricePerHour, pricePerKm, minFare, pricePerMin } = req.body;
+    const { pricePerHour, pricePerKm, minFare, coefForRoundTrip } = req.body;
 
     const roundTo2 = (val) => Math.round(val * 100) / 100;
 
@@ -33,7 +33,7 @@ exports.updatePrices = async (req, res) => {
     if (typeof pricePerHour === 'number') updates.pricePerHour = roundTo2(pricePerHour);
     if (typeof pricePerKm === 'number') updates.pricePerKm = roundTo2(pricePerKm);
     if (typeof minFare === 'number') updates.minFare = roundTo2(minFare);
-    if (typeof pricePerMin === 'number') updates.pricePerMin = roundTo2(pricePerMin);
+    if (typeof coefForRoundTrip === 'number') updates.pricePerMin = roundTo2(coefForRoundTrip);
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({ error: "Нечего обновлять: ни одно поле не передано или неверного типа" });
