@@ -1,9 +1,10 @@
 
-const calculatePrice = (distanceInKm, Prices) => {
+const calculatePrice = (distanceInKm, Prices, isRoundTrip) => {
   if (!Prices?.pricePerKm || !Prices?.minFare) return 0;
 
   let basePrice = Prices.pricePerKm;
   let minPriceForEnter = Prices.minFare;
+  let coefForRoundTrip = Prices.coefForRoundTrip || 1;
   let pricePerKm;
 
   if (distanceInKm <= 100) {
@@ -14,10 +15,17 @@ const calculatePrice = (distanceInKm, Prices) => {
     pricePerKm = basePrice;
   }
 
-  let price = distanceInKm * pricePerKm + minPriceForEnter;
-  if (price < minPriceForEnter) {
-    price = minPriceForEnter;
+  let adjustedPrice = distanceInKm * pricePerKm + minPriceForEnter;
+  if (adjustedPrice < minPriceForEnter) {
+    adjustedPrice = minPriceForEnter;
   }
+
+  const numericPrice = Number(price);
+  const price = !isNaN(numericPrice)
+    ? isRoundTrip
+      ? numericPrice * coefForRoundTrip
+      : numericPrice
+    : null;
   
 
   return parseFloat(price.toFixed(2));

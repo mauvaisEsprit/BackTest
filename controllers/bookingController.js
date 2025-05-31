@@ -14,7 +14,7 @@ exports.createBooking = async (req, res) => {
     const bookingNumber = uuidv4();
      
 
-    const { from, to, price } = req.body;
+    const { from, to, price, isRoundTrip } = req.body;
 
     if (!from || !to) {
       return res.status(400).json({ error: "Адреса отправления и прибытия обязательны" });
@@ -49,20 +49,14 @@ exports.createBooking = async (req, res) => {
     const distanceKm = route.distance / 1000;
     const durationMin = route.duration / 60;
 
-    console.log("Расстояние (км):", distanceKm);
-    console.log("Продолжительность (мин):", durationMin);
-    console.log("Цена из фронта:", price);
-    console.log("Цены из базы:", Prices.pricePerKm, Prices.minFare);
+    
 
     // Получение цен из настроек
     const prices = await Prices.findOne();
- const fare = calculatePrice(distanceKm, prices);
-    console.log("Расчетная цена из функции:", fare);
+    const fare = calculatePrice(distanceKm, prices , isRoundTrip);
+    
+  
 
-    // Проверка цены
-    if (price < fare) {
-  console.log("Цена из формы меньше минимальной цены");
-}
 
   const booking = new Booking1({
       ...req.body,
