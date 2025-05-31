@@ -15,12 +15,22 @@ async function sendReplyToClientEmail(message) {
     to: message.email,
     subject: subject,
     html: `
-      <h2>${greeting}</h2>
-      <p>${body}</p>
-      <p>${yourMessage}:</p>
-      <blockquote>${message.message}</blockquote>
-      <p>${closing}</p>
-    `,
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border: 1px solid #ddd;">
+      <h2 style="color: #333;">${greeting}</h2>
+
+      <p style="font-size: 16px; color: #555;">${body}</p>
+
+      <p style="font-size: 16px; color: #555; font-weight: bold; margin-top: 30px;">${yourMessage}:</p>
+      <blockquote style="margin: 10px 0; padding: 10px 15px; background-color: #f7f7f7; border-left: 4px solid #2196F3; color: #333;">
+        ${message.message}
+      </blockquote>
+
+      <p style="font-size: 16px; color: #555; margin-top: 30px;">${closing}</p>
+
+      <hr style="margin: 40px 0;" />
+      <p style="font-size: 12px; color: #aaa; text-align: center;">© ${new Date().getFullYear()} VTC Service</p>
+    </div>
+  `,
   };
 
   return transporter.sendMail(mailOptions);

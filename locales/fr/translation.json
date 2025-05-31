@@ -34,10 +34,10 @@
     "comment": "Commentaire",
     "type_of_trip": "Type de trajet",
     "reply_subject": "Merci pour votre message",
-  "reply_greeting": "Bonjour, {{name}} !",
-  "reply_body": "Merci pour votre message. Nous vous contacterons dans les plus brefs délais.",
-  "your_message": "Votre message",
-  "reply_closing": "Cordialement,<br/>L'équipe support"
+    "reply_greeting": "Bonjour, {{name}} !",
+    "reply_body": "Merci pour votre message. Nous vous contacterons dans les plus brefs délais.",
+    "your_message": "Votre message",
+    "reply_closing": "Cordialement,<br/>L'équipe support"
     
   }
 }
