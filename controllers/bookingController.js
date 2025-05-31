@@ -55,7 +55,7 @@ exports.createBooking = async (req, res) => {
     const prices = await Prices.findOne();
     const fare = calculatePrice(distanceKm, prices , isRoundTrip);
     
-  
+    console.log("Рассчитанная цена:", fare);
 
 
   const booking = new Booking1({
