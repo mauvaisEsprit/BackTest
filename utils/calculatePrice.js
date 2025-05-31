@@ -23,6 +23,7 @@ const calculatePrice = (distanceInKm, Prices, isRoundTrip) => {
   console.log("Расчетная цена:", numericPrice);
   const price = !isNaN(numericPrice)
     ? isRoundTrip ? numericPrice * coefForRoundTrip : numericPrice : null;
+    console.log(coefForRoundTrip, "Коэффициент для обратной поездки:", isRoundTrip);
 console.log("Цена после проверки на NaN:", price);
   if (price === null) return 0;
 
