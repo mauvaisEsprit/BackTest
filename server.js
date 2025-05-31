@@ -25,6 +25,9 @@ app.use("/api/admin", adminRoutes);
 const pingRoute = require("./routes/pingRoute");
 app.use("/", pingRoute);
 
+const adminPricesRoutes = require("./routes/adminPrices");
+app.use("/api/admin", adminPricesRoutes);
+
 
 // Запуск сервера
 const PORT = process.env.PORT || 3001;
