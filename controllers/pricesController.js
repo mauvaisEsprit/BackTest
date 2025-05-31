@@ -26,27 +26,24 @@ exports.updatePrices = async (req, res) => {
     const locale = (req.query.locale || 'fr').toLowerCase();
     const { pricePerHour, pricePerKm, minFare, pricePerMin } = req.body;
 
-    if (pricePerHour === undefined || pricePerKm === undefined) {
-      return res.status(400).json({ error: "Необходимы поля pricePerHour и pricePerKm" });
-    }
-
-    if (
-      typeof pricePerHour !== 'number' ||
-      typeof pricePerKm !== 'number' ||
-      typeof minFare !== 'number' ||
-      typeof pricePerMin !== 'number'
-    ) {
-      return res.status(400).json({ error: "Ожидаются числовые значения pricePerHour и pricePerKm" });
-    }
-
     const roundTo2 = (val) => Math.round(val * 100) / 100;
+
+    const updates = {};
+
+    if (typeof pricePerHour === 'number') updates.pricePerHour = roundTo2(pricePerHour);
+    if (typeof pricePerKm === 'number') updates.pricePerKm = roundTo2(pricePerKm);
+    if (typeof minFare === 'number') updates.minFare = roundTo2(minFare);
+    if (typeof pricePerMin === 'number') updates.pricePerMin = roundTo2(pricePerMin);
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ error: "Нечего обновлять: ни одно поле не передано или неверного типа" });
+    }
+
+    updates.locale = locale; // обязательно для upsert
 
     const prices = await Prices.findOneAndUpdate(
       { locale },
-      {
-        pricePerHour: roundTo2(pricePerHour),
-        pricePerKm: roundTo2(pricePerKm),
-      },
+      { $set: updates },
       { new: true, upsert: true }
     );
 
