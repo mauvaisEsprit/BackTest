@@ -5,6 +5,7 @@ const { sendConfirmationMail } = require("../utils/bookingConfirmation");
 const i18next = require("../config/i18n");
 const Prices = require("../models/prices");
 const calculatePrice = require("../utils/calculatePrice");
+const axios = require("axios");
 
 // ➕ Создание бронирования
 exports.createBooking = async (req, res) => {
