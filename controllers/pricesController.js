@@ -8,15 +8,9 @@ exports.getPrices = async (req, res) => {
     let prices = await Prices.findOne({ locale });
 
     if (!prices) {
-      prices = await Prices.create({
-        locale,           // Важно указать locale!
-        pricePerKm: 1.5,
-        pricePerMin: 0.3,
-        minFare: 5,
-        pricePerHour: 35
-      });
+      
       // Вернём созданные цены, а не 404
-      return res.json(prices);
+      return res.status(404).json({ error: "Цены не найдены" });
     }
 
     res.json(prices);
