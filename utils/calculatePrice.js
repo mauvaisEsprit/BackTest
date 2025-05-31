@@ -14,10 +14,11 @@ const calculatePrice = (distanceInKm, Prices) => {
     pricePerKm = basePrice;
   }
 
-  let price = distanceInKm * pricePerKm;
+  let price = distanceInKm * pricePerKm + minPriceForEnter;
   if (price < minPriceForEnter) {
     price = minPriceForEnter;
   }
+  
 
   return parseFloat(price.toFixed(2));
 };
