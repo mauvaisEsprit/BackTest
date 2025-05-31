@@ -4,23 +4,28 @@ const Prices = require("../models/prices");
 
 exports.getPrices = async (req, res) => {
   try {
-    let prices = await Prices.findOne({ locale: req.query.locale || 'fr' });
-    if (!prices) {
+    const locale = req.query.locale || 'fr';
+    let prices = await Prices.findOne({ locale });
 
-        prices  = await Prices.create({
+    if (!prices) {
+      prices = await Prices.create({
+        locale,           // Важно указать locale!
         pricePerKm: 1.5,
         pricePerMin: 0.3,
         minFare: 5,
         pricePerHour: 35
       });
-      return res.status(404).json({ error: "Цены не найдены" });
+      // Вернём созданные цены, а не 404
+      return res.json(prices);
     }
+
     res.json(prices);
   } catch (err) {
     console.error("Ошибка при получении цен:", err);
     res.status(500).json({ error: "Ошибка при получении цен" });
   }
-}
+};
+
 
 exports.updatePrices = async (req, res) => {
   try {
