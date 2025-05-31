@@ -1,4 +1,4 @@
-const calculatePrice = (distanceInKm, Prices, isRoundTrip) => {
+const calculatePrice = (distanceInKm, Prices, isRoundTrip, ) => {
   if (!Prices?.pricePerKm || !Prices?.minFare) return 0;
 
   let basePrice = Prices.pricePerKm;
@@ -20,11 +20,11 @@ const calculatePrice = (distanceInKm, Prices, isRoundTrip) => {
   }
 
   const numericPrice = Number(adjustedPrice);
-  console.log("Расчетная цена:", numericPrice);
+  
   const price = !isNaN(numericPrice)
     ? isRoundTrip ? numericPrice * coefForRoundTrip : numericPrice : null;
-    console.log(coefForRoundTrip, "Коэффициент для обратной поездки:", isRoundTrip);
-console.log("Цена после проверки на NaN:", price);
+    
+
   if (price === null) return 0;
 
   return parseFloat(price.toFixed(2));
