@@ -11,7 +11,7 @@ exports.getPrices = async (req, res) => {
         pricePerKm: 1.5,
         pricePerMin: 0.3,
         minFare: 5,
-        hourlyRate: 35
+        pricePerHour: 35
       });
       return res.status(404).json({ error: "Цены не найдены" });
     }
