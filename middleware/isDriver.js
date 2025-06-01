@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = function(req, res, next) {
+module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: 'Нет токена' });
 
@@ -9,12 +9,15 @@ module.exports = function(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     if (decoded.role !== 'driver') {
       return res.status(403).json({ message: 'Нет доступа' });
     }
-    req.user = decoded;
+
+    req.driver = decoded; // вот здесь ключевой момент — записываем в req.driver
     next();
-  } catch {
-    return res.status(403).json({ message: 'Неверный токен' });
+  } catch (error) {
+    console.error('JWT verification failed:', error);
+    res.status(403).json({ message: 'Неверный токен' });
   }
 };
