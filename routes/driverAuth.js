@@ -22,7 +22,9 @@ router.post('/', async (req, res) => {
       { expiresIn: '30m' }
     );
 
-    res.json({ token, role: 'driver' });
+    const name = driver.name;
+
+    res.json({ token, role: 'driver', name: name });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ошибка сервера' });

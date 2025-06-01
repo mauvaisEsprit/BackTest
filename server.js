@@ -32,6 +32,9 @@ app.use("/api/login/admin", adminPricesRoutes);
 const driverAuthRoutes = require("./routes/driverAuth");
 app.use("/api/login/driver", driverAuthRoutes);
 
+const driverRoutes = require("./routes/driverRoutes");
+app.use("/api/login/driver", driverRoutes);
+
 
 
 
