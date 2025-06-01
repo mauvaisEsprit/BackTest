@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const Driver = require('../models/ariver');
+const Driver = require('../models/driver');
 
 
 exports.getProfile = async (req, res) => {
