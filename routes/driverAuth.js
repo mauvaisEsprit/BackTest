@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
 
     const name = driver.name;
 
-    res.json({ driverToken, role: 'driver', name: name });
+    res.json({ driverToken: token, role: 'driver', name: name });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ошибка сервера' });
