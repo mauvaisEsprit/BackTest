@@ -23,30 +23,92 @@ async function sendBookingReceivedEmail(booking) {
     ? i18next.t("email.round_trip")
     : i18next.t("email.one_way_trip");
 
-  const returnDateHtml = booking.returnDate
-    ? `<p><b>${i18next.t("email.return_date")}:</b> ${parisReturnDate}</p>`
-    : "";
+  const returnDateHtml = booking.returnDate 
+  ? `<tr>
+      <td style="padding: 8px 0;"><strong>${i18next.t("email.return_date")}:</strong></td>
+      <td style="padding: 8px 0;">${parisReturnDate}</td>
+    </tr>`
+  : "";
+
 
   const mailOptions = {
     from: process.env.GMAIL_USER,
     to: booking.email,
     subject: i18next.t("email.new_booking_subject"),
     html: `
-      <h2>${i18next.t("email.new_booking_title")}</h2>
-      <p><b>${i18next.t("email.booking_number")}:</b> ${booking.bookingNumber}</p>
-      <p><b>${i18next.t("email.name")}:</b> ${booking.name}</p>
-      <p><b>${i18next.t("email.phone")}:</b> ${booking.phone}</p>
-      <p><b>${i18next.t("email.email")}:</b> ${booking.email}</p>
-      <p><b>${i18next.t("email.from")}:</b> ${booking.from}</p>
-      <p><b>${i18next.t("email.to")}:</b> ${booking.to}</p>
-      <p><b>${i18next.t("email.date")}:</b> ${parisDate}</p>
-      ${returnDateHtml}
-      <p><b>${i18next.t("email.adults")}:</b> ${booking.adults || 0}</p>
-      <p><b>${i18next.t("email.children")}:</b> ${booking.children || 0}</p>
-      <p><b>${i18next.t("email.baggage")}:</b> ${booking.baggage ? i18next.t("yes") : i18next.t("no")}</p>
-      <p><b>${i18next.t("email.comment")}:</b> ${booking.comment || i18next.t("email.not_specified")}</p>
-      <p><b>${i18next.t("email.garant")}:</b>${i18next.t("email.yes")}</p>
-      <p><b>${i18next.t("email.price")}:</b> ${normPrice}€</p>
+     <div style="font-family: Arial, sans-serif; background-color: #f5f7fa; padding: 20px; color: #333;">
+  <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+
+    <h2 style="color: #2c3e50; margin-top: 0;">
+      ${i18next.t("email.new_booking_title")}
+    </h2>
+
+    <table style="width: 100%; border-collapse: collapse;">
+      <tbody>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.booking_number")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.bookingNumber}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.name")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.phone")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.phone}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.email")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.email}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.from")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.from}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.to")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.to}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.date")}:</strong></td>
+          <td style="padding: 8px 0;">${parisDate}</td>
+        </tr>
+
+        ${returnDateHtml}
+
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.adults")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.adults || 0}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.children")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.children || 0}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.baggage")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.baggage ? i18next.t("yes") : i18next.t("no")}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.comment")}:</strong></td>
+          <td style="padding: 8px 0;">${booking.comment || i18next.t("email.not_specified")}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.garant")}:</strong></td>
+          <td style="padding: 8px 0;">${i18next.t("email.yes")}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0;"><strong>${i18next.t("email.price")}:</strong></td>
+          <td style="padding: 8px 0;">${normPrice}€</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top: 24px; font-size: 14px; color: #555;">
+      ${i18next.t("email.we_look_forward")}
+    </p>
+  </div>
+</div>
+
     `,
   };
 
