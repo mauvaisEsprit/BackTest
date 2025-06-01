@@ -4,7 +4,10 @@ const hourlyCalculate = (data, prices) => {
     const pricePerHour = prices.pricePerHour; 
     const minFare = prices.minFare;
 
+    console.log("Calculating hourly fare with duration:", duration, "pricePerHour:", pricePerHour, "minFare:", minFare);
+
     const firstPrice = duration * pricePerHour + minFare; 
+    console.log("Calculated firstPrice:", firstPrice);
 
     if (firstPrice < minFare) {
         return minFare; // Ensure the price is at least the minimum fare
