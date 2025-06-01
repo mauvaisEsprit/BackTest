@@ -11,6 +11,7 @@ exports.createHourlyBooking = async (req, res) => {
     const locale = req.body.locale || 'ru';
     const prices = await Prices.findOne();
     const duration = req.body.duration;
+    console.log("Received duration:", duration, typeof duration);
     const bookingNumber = uuidv4();
     const priceServer = hourlyCalculate(duration, prices);
     console.log("Calculated price for hourly booking:", priceServer);
