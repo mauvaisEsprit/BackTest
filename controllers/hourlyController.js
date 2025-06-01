@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const sendHourlyBookingConfirmationEmail  = require("../utils/hourlyConfirmation");
 const { sendHourlyBookingReceptionEmail } = require("../utils/hourlyReception");
 const Prices = require("../models/prices");
+const hourlyCalculate = require("../utils/hourlyCalculate");
 
 // ➕ Создание аренды
 exports.createHourlyBooking = async (req, res) => {
