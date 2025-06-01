@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-
+const addDriver = require("./utils/newDriver");
 
 app.use(cors());
 app.use(express.json());
@@ -32,7 +32,9 @@ app.use("/api/login/admin", adminPricesRoutes);
 const driverAuthRoutes = require("./routes/driverAuth");
 app.use("/api/login/driver", driverAuthRoutes);
 
-
+addDriver('vovasemen@icloud.com', 'poisson')
+  .then(() => process.exit())
+  .catch(console.error);
 
 
 
