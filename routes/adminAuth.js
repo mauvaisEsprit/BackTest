@@ -23,7 +23,7 @@ router.post('/', (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '30m' }
     );
-    return res.json({ token });
+    return res.json({ token, role: 'admin' });
   }
 
   return res.status(401).json({ message: 'Неверный логин или пароль' });
