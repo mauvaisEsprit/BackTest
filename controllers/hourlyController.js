@@ -2,13 +2,18 @@ const Booking2 = require("../models/booking2");
 const { v4: uuidv4 } = require('uuid');
 const sendHourlyBookingConfirmationEmail  = require("../utils/hourlyConfirmation");
 const { sendHourlyBookingReceptionEmail } = require("../utils/hourlyReception");
+const Prices = require("../models/prices");
 
 // ➕ Создание аренды
 exports.createHourlyBooking = async (req, res) => {
   try {
     const locale = req.body.locale || 'ru';
+    const prices = await Prices.findOne();
+    const duration = req.body.duration;
     const bookingNumber = uuidv4();
-    const booking = new Booking2({ ...req.body, bookingNumber, locale });
+    const priceServer = hourlyCalculate(duration, prices);
+    const booking = new Booking2({ ...req.body, bookingNumber, locale, priceServer: priceServer });
+
     await booking.save();
 
     await sendHourlyBookingReceptionEmail(booking);

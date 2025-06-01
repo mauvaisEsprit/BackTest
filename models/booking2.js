@@ -11,6 +11,7 @@ const bookingSchema2 = new mongoose.Schema({
   email: String,
   tripPurpose: String,
   totalPrice: Number,
+  priceServer: Number,
   bookingNumber: { type: String, required: true, unique: true },
   id: String,
   garant: Boolean,
