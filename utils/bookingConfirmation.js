@@ -113,13 +113,14 @@ async function sendConfirmationMail(booking) {
                   }</td>
                 </tr>
                 <tr>
-                  <td style="padding: 6px 0; font-weight: bold;">${i18next.t(
-                    "email.comment"
-                  )}:</td>
-                  <td style="padding: 6px 0;">${
-                    booking.comment || i18next.t("email.not_specified")
-                  }</td>
-                </tr>
+  <td style="padding: 6px 0; font-weight: bold;">${i18next.t(
+    "email.comment"
+  )}:</td>
+  <td style="padding: 6px 0; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word;">
+    ${booking.comment || i18next.t("email.not_specified")}
+  </td>
+</tr>
+
                 <tr>
                   <td style="padding: 6px 0; font-weight: bold;">${i18next.t(
                     "email.garant"
