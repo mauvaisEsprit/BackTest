@@ -4,8 +4,8 @@ const auth = require("../middleware/isAdmin");
 const router = express.Router();
 
 router.post("/", messageController.createMessage);
-router.get("/admin", auth, messageController.getMessages);
-router.post("/admin/:id/reply", auth, messageController.replyMessage);
-router.delete("/admin/:id", auth, messageController.deleteMessage);
+router.get("/login/admin", auth, messageController.getMessages);
+router.post("/login/admin/:id/reply", auth, messageController.replyMessage);
+router.delete("/login/admin/:id", auth, messageController.deleteMessage);
 
 module.exports = router;

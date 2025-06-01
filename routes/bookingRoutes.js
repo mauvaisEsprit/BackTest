@@ -5,8 +5,8 @@ const auth = require("../middleware/isAdmin");
 const router = express.Router();
 
 router.post("/", bookingController.createBooking);
-router.get("/admin", auth, bookingController.getBookings);
-router.put("/admin/:id/confirm", auth, bookingController.confirmBooking);
-router.delete("/admin/:id", auth, bookingController.deleteBooking);
+router.get("/login/admin", auth, bookingController.getBookings);
+router.put("/login/admin/:id/confirm", auth, bookingController.confirmBooking);
+router.delete("/login/admin/:id", auth, bookingController.deleteBooking);
 
 module.exports = router;
