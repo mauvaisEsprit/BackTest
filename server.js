@@ -20,13 +20,13 @@ const messageRoutes = require("./routes/messageRoutes");
 app.use("/api/messages", messageRoutes);
 
 const adminRoutes = require("./routes/adminAuth");
-app.use("/api/admin", adminRoutes);
+app.use("/api/login/admin", adminRoutes);
 
 const pingRoute = require("./routes/pingRoute");
 app.use("/", pingRoute);
 
 const adminPricesRoutes = require("./routes/adminPrices");
-app.use("/api/admin", adminPricesRoutes);
+app.use("/api/login/admin", adminPricesRoutes);
 
 
 // Запуск сервера
