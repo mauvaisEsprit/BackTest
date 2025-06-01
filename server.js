@@ -33,7 +33,7 @@ const driverAuthRoutes = require("./routes/driverAuth");
 app.use("/api/login/driver", driverAuthRoutes);
 
 const driverRoutes = require("./routes/driverRoutes");
-app.use("/api/login/driver", driverRoutes);
+app.use("/api/driver", driverRoutes);
 
 
 
