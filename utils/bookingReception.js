@@ -162,10 +162,19 @@ async function sendBookingReceivedEmail(booking) {
           </td>
         </tr>
         <tr>
-          <td style="padding-top: 24px; font-size: 14px; color: #555;">
-            ${i18next.t("email.thank_you_message")}
-          </td>
-        </tr>
+  <td style="padding-top: 24px; font-size: 14px; color: #555;">
+    ${i18next.t("email.thank_you_message")}
+  </td>
+</tr>
+<tr>
+  <td style="border-top: 1px solid #ddd; padding-top: 24px;"></td>
+</tr>
+<tr>
+  <td style="font-size: 12px; color: #aaa; text-align: center; padding-top: 16px;">
+    © ${new Date().getFullYear()} Blue Coast. ${i18next.t("email.rightsReserved")}
+  </td>
+</tr>
+
       </table>
     </td>
   </tr>
