@@ -28,6 +28,9 @@ app.use("/", pingRoute);
 const adminPricesRoutes = require("./routes/adminPrices");
 app.use("/api/login/admin", adminPricesRoutes);
 
+const driverAuthRoutes = require("./routes/driverAuth");
+app.use("/api/login/driver", driverAuthRoutes);
+
 
 // Запуск сервера
 const PORT = process.env.PORT || 3001;
