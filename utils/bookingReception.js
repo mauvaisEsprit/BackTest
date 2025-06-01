@@ -163,7 +163,7 @@ async function sendBookingReceivedEmail(booking) {
         </tr>
         <tr>
           <td style="padding-top: 24px; font-size: 14px; color: #555;">
-            ${i18next.t("email.we_look_forward")}
+            ${i18next.t("email.thank_you_message")}
           </td>
         </tr>
       </table>
