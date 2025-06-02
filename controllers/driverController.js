@@ -60,16 +60,23 @@ exports.registerDriver = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    console.log(req.user.id);
-    console.log(req.user);
-    console.log(req.body);
+    let driverId;
 
-    const driverId = req.user.id; // из токена
-    const updates = req.body;
+    if (req.user.role === 'driver') {
+      driverId = req.user.id;  // обновляет сам себя
+    } else if (req.user.role === 'admin') {
+      driverId = req.body.id;  // админ указывает, кого обновлять
+      if (!driverId) {
+        return res.status(400).json({ message: 'ID водителя обязателен для администратора' });
+      }
+    } else {
+      return res.status(403).json({ message: 'Нет доступа' });
+    }
 
-    // не даём менять email или password напрямую здесь, если не хочешь
+    const updates = { ...req.body };
     delete updates.email;
     delete updates.passwordHash;
+    delete updates.id; // не даём менять id
 
     const updatedDriver = await Driver.findByIdAndUpdate(
       driverId,
@@ -86,7 +93,8 @@ exports.updateProfile = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: 'Erreur du serveur' });
   }
-}
+};
+
 
 
 exports.changePassword = async (req, res) => {
