@@ -5,7 +5,7 @@ const Driver = require('../models/driver');
 
 exports.getProfile = async (req, res) => {
   try {
-    const driver = await Driver.findById(req.user.id).select('-passwordHash');
+    const driver = await Driver.findById(req.driver.id).select('-passwordHash');
     res.json(driver);
   } catch (err) {
     console.error(err);
@@ -60,7 +60,11 @@ exports.registerDriver = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const driverId = req.user.id; // из токена
+    console.log(req.driver.id);
+    console.log(req.driver);
+    console.log(req.body);
+
+    const driverId = req.driver.id; // из токена
     const updates = req.body;
 
     // не даём менять email или password напрямую здесь, если не хочешь
