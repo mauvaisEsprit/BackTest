@@ -1,11 +1,11 @@
 const express = require("express");
 const messageController = require("../controllers/messageController");
-const auth = require("../middleware/isAdmin");
+const auth = require("../middleware/authMiddleware");
 const router = express.Router();
 
 router.post("/", messageController.createMessage);
-router.get("/login/admin", auth, messageController.getMessages);
-router.post("/login/admin/:id/reply", auth, messageController.replyMessage);
-router.delete("/login/admin/:id", auth, messageController.deleteMessage);
+router.get("/login/admin", auth(["admin"]), messageController.getMessages);
+router.post("/login/admin/:id/reply", auth(["admin"]), messageController.replyMessage);
+router.delete("/login/admin/:id", auth(["admin"]), messageController.deleteMessage);
 
 module.exports = router;

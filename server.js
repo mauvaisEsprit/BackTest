@@ -20,7 +20,7 @@ app.use("/api/hourly", hourlyRoutes);
 const messageRoutes = require("./routes/messageRoutes");
 app.use("/api/messages", messageRoutes);
 
-const adminRoutes = require("./routes/adminAuth");
+const adminRoutes = require("./routes/authRoutes");
 app.use("/api/login/admin", adminRoutes);
 
 const pingRoute = require("./routes/pingRoute");
@@ -29,8 +29,6 @@ app.use("/", pingRoute);
 const adminPricesRoutes = require("./routes/adminPrices");
 app.use("/api/login/admin", adminPricesRoutes);
 
-const driverAuthRoutes = require("./routes/driverAuth");
-app.use("/api/login/driver", driverAuthRoutes);
 
 const driverRoutes = require("./routes/driverRoutes");
 app.use("/api/driver", driverRoutes);
