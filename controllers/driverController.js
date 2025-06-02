@@ -74,7 +74,6 @@ exports.updateProfile = async (req, res) => {
     }
 
     const updates = { ...req.body };
-    delete updates.email;
     delete updates.passwordHash;
     delete updates.id; // не даём менять id
 
@@ -99,7 +98,7 @@ exports.updateProfile = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    const driverId = req.driver.id;
+    const driverId = req.user.id;
     const { oldPassword, newPassword } = req.body;
 
     if (!oldPassword || !newPassword) {
@@ -126,3 +125,43 @@ exports.changePassword = async (req, res) => {
     res.status(500).json({ message: 'Erreur du serveur' });
   }
 };
+
+exports.adminChangePassword = async (req, res) => {
+  try {
+    const { driverId, newPassword } = req.body;
+
+    if (!driverId || !newPassword) {
+      return res.status(400).json({ message: 'ID du chauffeur et nouveau mot de passe requis' });
+    }
+
+    const driver = await Driver.findById(driverId);
+    if (!driver) {
+      return res.status(404).json({ message: 'Chauffeur non trouvé' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    driver.passwordHash = hashedPassword;
+    await driver.save();
+
+    res.json({ message: 'Mot de passe changé avec succès par l\'admin' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Erreur du serveur' });
+  }
+};
+
+
+exports.deleteDriver = async (req, res) => {
+  try {
+    const driverId = req.params.id;
+    const deletedDriver = await Driver.findByIdAndDelete(driverId);
+    if (!deletedDriver) {
+      return res.status(404).json({ message: 'Chauffeur non trouvé' });
+    }
+    res.json({ message: 'Chauffeur supprimé avec succès' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Erreur du serveur' });
+  }
+};
+
