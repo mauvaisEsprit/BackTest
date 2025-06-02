@@ -21,13 +21,13 @@ const messageRoutes = require("./routes/messageRoutes");
 app.use("/api/messages", messageRoutes);
 
 const adminRoutes = require("./routes/authRoutes");
-app.use("/api/login/admin", adminRoutes);
+app.use("/api/login", adminRoutes);
 
 const pingRoute = require("./routes/pingRoute");
 app.use("/", pingRoute);
 
 const adminPricesRoutes = require("./routes/adminPrices");
-app.use("/api/login/admin", adminPricesRoutes);
+app.use("/api/admin", adminPricesRoutes);
 
 
 const driverRoutes = require("./routes/driverRoutes");
