@@ -60,11 +60,11 @@ exports.registerDriver = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    console.log(req.driver.id);
-    console.log(req.driver);
+    console.log(req.user.id);
+    console.log(req.user);
     console.log(req.body);
 
-    const driverId = req.driver.id; // из токена
+    const driverId = req.user.id; // из токена
     const updates = req.body;
 
     // не даём менять email или password напрямую здесь, если не хочешь

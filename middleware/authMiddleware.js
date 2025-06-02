@@ -11,7 +11,7 @@ module.exports = function(allowedRoles = []) {
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.driver = decoded;
+      req.user = decoded;
 
       // Если роли не заданы — доступ всем авторизованным
       if (allowedRoles.length > 0 && !allowedRoles.includes(decoded.role)) {
