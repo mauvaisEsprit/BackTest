@@ -1,4 +1,3 @@
-const express = require('express');
 const bcrypt = require('bcryptjs');
 const Driver = require('../models/driver');
 
