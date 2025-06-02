@@ -5,7 +5,7 @@ const Driver = require('../models/driver');
 
 exports.getProfile = async (req, res) => {
   try {
-    const driver = await Driver.findById(req.driver.id).select('-passwordHash');
+    const driver = await Driver.findById(req.user.id).select('-passwordHash');
     res.json(driver);
   } catch (err) {
     console.error(err);
