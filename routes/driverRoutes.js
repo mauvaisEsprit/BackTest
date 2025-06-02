@@ -7,6 +7,6 @@ router.get('/profile', auth(['driver', 'admin']), driverController.getProfile);
 router.put('/update', auth(['driver', 'admin']), driverController.updateProfile);
 router.put('/change-password', auth(['driver']), driverController.changePassword);
 router.put('/admin-change-password', auth(['admin']), driverController.adminChangePassword);
-router.delete('/delete', auth(['admin']), driverController.deleteDriver);
+router.delete('/:id', auth(['admin']), driverController.deleteDriver);
 
 module.exports = router;
